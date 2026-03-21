@@ -1,0 +1,31 @@
+# WeatherNow — SwiftFormat 設定
+# Swift 6 / iOS 17+
+
+--swiftversion 6.0
+--indent 4
+--tabwidth 4
+--allman false
+--linebreaks lf
+--semicolons never
+--commas always
+--trimwhitespace always
+--maxwidth 120
+--header strip
+
+# 引数・パラメータの折り返し
+--wraparguments before-first
+--wrapparameters before-first
+--wrapcollections before-first
+--closingparen balanced
+
+# self
+--self init-only
+
+# import
+--importgrouping testable-bottom
+
+# 無効化するルール
+--disable fileHeader,wrapSingleLineComments
+
+# 除外ディレクトリ
+--exclude Tools,.build,Packages/*/.build,DerivedData,*.xcodeproj,Resources

@@ -25,6 +25,7 @@ DerivedData/
 .swiftpm/
 Packages/checkouts/
 Packages/build/
+Tools/.build/
 
 # CocoaPods
 Pods/
