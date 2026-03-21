@@ -1,0 +1,78 @@
+# Xcode
+*.xcodeproj/*
+!*.xcodeproj/project.pbxproj
+!*.xcodeproj/xcshareddata/
+!*.xcodeproj/project.xcworkspace/
+!*.xcodeproj/project.xcworkspace/xcshareddata/
+*.xcworkspace/*
+!*.xcworkspace/contents.xcworkspacedata
+!*.xcworkspace/xcshareddata/
+
+## User-specific settings
+xcuserdata/
+
+# Build
+build/
+DerivedData/
+*.o
+*.hmap
+
+# Archives
+*.xcarchive
+
+# Swift Package Manager
+.build/
+.swiftpm/
+Packages/checkouts/
+Packages/build/
+
+# CocoaPods
+Pods/
+*.xcworkspace
+
+# Carthage
+Carthage/Build/
+
+# fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.png
+fastlane/test_output
+
+# Code signing
+*.p12
+*.cer
+*.mobileprovision
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# Instruments
+*.trace
+
+# Playgrounds
+timeline.xctimeline
+playground.xcworkspace
+
+# TestFlight / AppStore
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Environment
+.env
+.env.local
+
+# Editor
+.idea/
+*.swp
+*.swo
+*~
+
+# Claude Code
+.claude/settings.local.json
