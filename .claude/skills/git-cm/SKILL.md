@@ -8,13 +8,14 @@
    `git status` と `git diff`（未追跡ファイル含む）を実行し、すべての変更を把握する。
 
 2. **lint チェック**
-   `swift run -c release --package-path Tools swiftlint lint .` を実行する。
+   `Tools/.build/release/swiftlint lint .` を実行する。
+   - バイナリが存在しない場合は `make bootstrap` を実行してから再試行する。
    - エラーがあればコミットを中断し、ユーザーに報告して終了する。
    - warning のみであれば内容を表示した上で続行する。
 
 3. **フォーマット確認**
-   `swift run -c release --package-path Tools swiftformat --lint .` を実行する（ドライラン）。
-   - 差分がある場合はファイル名を列挙してユーザーに報告し、`swift run -c release --package-path Tools swiftformat .` で自動修正してから続行する。
+   `Tools/.build/release/swiftformat --lint .` を実行する（ドライラン）。
+   - 差分がある場合はファイル名を列挙してユーザーに報告し、`Tools/.build/release/swiftformat .` で自動修正してから続行する。
 
 4. **変更のグループ化**
    関連するファイルをロジカルなコミット単位にまとめる。1コミット = 1つの関心事。無関係な変更を同一コミットに混在させない。

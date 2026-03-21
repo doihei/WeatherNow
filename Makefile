@@ -5,7 +5,7 @@ bootstrap:
 	swift build --package-path Tools -c release --product swiftformat
 
 format:
-	swift run -c release --package-path Tools swiftformat .
+	Tools/.build/release/swiftformat .
 
 lint:
-	swift run -c release --package-path Tools swiftlint lint .
+	Tools/.build/release/swiftlint lint .
