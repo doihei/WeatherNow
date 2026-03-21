@@ -15,7 +15,9 @@
       "Bash(cat:*)",
       "Bash(open:*)",
       "Edit(/.claude/skills/git-cm/**)",
-      "Edit(/.claude/skills/update-docs/**)"
+      "Edit(/.claude/skills/update-docs/**)",
+      "Bash(Tools/.build/release/swiftlint:*)",
+      "Bash(Tools/.build/release/swiftformat:*)"
     ],
     "additionalDirectories": [
       "/Users/daiheidoi/dev/WeatherNow/.claude/skills"

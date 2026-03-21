@@ -23,8 +23,10 @@ WeatherNow/
 │       └── Sources/WeatherFeatureTCA/    # TCA実装
 ├── Tools/                        # 開発ツール（SwiftFormat・SwiftLint）
 │   └── Package.swift
-├── WeatherNow/WeatherNow/        # Xcodeアプリ本体
-│   └── WeatherNowApp.swift
+├── WeatherNow/                   # Xcodeアプリ本体
+│   ├── Sources/WeatherNowApp.swift
+│   └── WeatherNow.xcodeproj/
+├── WhetherNow.xcworkspace        # ルートワークスペース
 ├── .swiftformat                  # SwiftFormat 設定
 ├── .swiftlint.yml                # SwiftLint 設定
 └── Makefile                      # 開発コマンド
