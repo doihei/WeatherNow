@@ -21,8 +21,13 @@ WeatherNow/
 │   └── WeatherFeature/           # UI層（→ WeatherDomain, CoreUI）
 │       ├── Sources/WeatherFeatureMVVM/   # MVVM実装
 │       └── Sources/WeatherFeatureTCA/    # TCA実装
-└── WeatherNow/WeatherNow/        # Xcodeアプリ本体
-    └── WeatherNowApp.swift
+├── Tools/                        # 開発ツール（SwiftFormat・SwiftLint）
+│   └── Package.swift
+├── WeatherNow/WeatherNow/        # Xcodeアプリ本体
+│   └── WeatherNowApp.swift
+├── .swiftformat                  # SwiftFormat 設定
+├── .swiftlint.yml                # SwiftLint 設定
+└── Makefile                      # 開発コマンド
 ```
 
 依存方向は **下向きのみ**（WeatherFeature → WeatherDomain → CoreNetwork → CoreModels）。
@@ -32,8 +37,20 @@ WeatherNow/
 | ライブラリ | バージョン | 使用箇所 |
 |-----------|-----------|---------|
 | swift-composable-architecture | 1.17.0+ | WeatherFeatureTCA のみ |
+| SwiftFormat | 0.54.0+ | Tools（開発ツール） |
+| SwiftLint | 0.57.0+ | Tools（開発ツール） |
 
 Swift Charts・CoreLocation はシステムフレームワークのため SPM 不要。
+
+## 開発コマンド
+
+```bash
+make bootstrap   # SwiftFormat・SwiftLint を release ビルド（初回のみ）
+make format      # SwiftFormat でコード整形
+make lint        # SwiftLint でコード検査
+```
+
+Xcode ビルド時は Run Script Phase で SwiftFormat（lint）・SwiftLint が自動実行される。
 
 ## アーキテクチャ方針
 

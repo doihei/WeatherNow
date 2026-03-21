@@ -6,10 +6,23 @@ Open-Meteo API を使った iOS 天気予報アプリ。MVVM + @Observable と T
 - **API:** Open-Meteo（認証不要・無料）
 - **外部ライブラリ:** [The Composable Architecture](https://github.com/pointfreeco/swift-composable-architecture)
 
+## セットアップ
+
+```bash
+# SwiftFormat・SwiftLint のビルド（初回のみ）
+make bootstrap
+
+# フォーマット
+make format
+
+# Lint
+make lint
+```
+
 ## SPM モジュール構成
 
 ```
-WeatherApp
+WeatherNow
 ├── WeatherFeatureMVVM   ← MVVM 実装
 ├── WeatherFeatureTCA    ← TCA 実装
 ├── WeatherDomain        ← Repository・LocationService
