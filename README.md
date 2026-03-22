@@ -4,7 +4,7 @@ Open-Meteo API を使った iOS 天気予報アプリ。MVVM + @Observable と T
 
 - **iOS 17+** / Swift 6
 - **API:** Open-Meteo（認証不要・無料）
-- **外部ライブラリ:** [The Composable Architecture](https://github.com/pointfreeco/swift-composable-architecture)
+- **外部ライブラリ:** [The Composable Architecture](https://github.com/pointfreeco/swift-composable-architecture) / [SFSafeSymbols](https://github.com/SFSafeSymbols/SFSafeSymbols)
 
 ## セットアップ
 
@@ -31,4 +31,10 @@ WeatherNow
 └── CoreUI               ← 共通コンポーネント
 ```
 
-詳細は [Docs/spec.md](Docs/spec.md) を参照。
+## ドキュメント
+
+| ファイル | 内容 |
+|---|---|
+| [Docs/spec.md](Docs/spec.md) | 画面仕様・データモデル設計 |
+| [Docs/api.md](Docs/api.md) | Open-Meteo API エンドポイント・レスポンス定義 |
+| [Docs/architecture.md](Docs/architecture.md) | モジュール構成・依存関係・MVVM vs TCA 比較 |
