@@ -1,11 +1,10 @@
 // swift-tools-version: 6.2
-// The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
 
 let package = Package(
     name: "CoreUI",
-    platforms: [.iOS(.v17)],
+    platforms: [.iOS(.v17), .macOS(.v14)],
     products: [
         .library(
             name: "CoreUI",
@@ -14,11 +13,15 @@ let package = Package(
     ],
     dependencies: [
         .package(path: "../CoreModels"),
+        .package(url: "https://github.com/SFSafeSymbols/SFSafeSymbols.git", from: "5.3.0"),
     ],
     targets: [
         .target(
             name: "CoreUI",
-            dependencies: ["CoreModels"]
+            dependencies: [
+                "CoreModels",
+                .product(name: "SFSafeSymbols", package: "SFSafeSymbols"),
+            ]
         ),
         .testTarget(
             name: "CoreUITests",
