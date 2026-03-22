@@ -1,7 +1,7 @@
 import CoreModels
 import CoreNetwork
+import Foundation
 import Testing
-
 @testable import WeatherDomain
 
 // MARK: - テスト用フィクスチャ
@@ -24,7 +24,6 @@ private extension Weather {
 
 // MARK: - WeatherRepositoryTests
 
-@Suite("WeatherRepository")
 struct WeatherRepositoryTests {
     // MARK: - fetchWeather
 
@@ -42,7 +41,11 @@ struct WeatherRepositoryTests {
 
     @Test("fetchWeather 2回目はキャッシュから返し API を呼ばない")
     func fetchWeatherUsesCache() async throws {
-        actor CallCounter { var count = 0; func increment() { count += 1 } }
+        actor CallCounter { var count = 0
+            func increment() {
+                count += 1
+            }
+        }
         let counter = CallCounter()
 
         let repo = WeatherRepository(
@@ -61,7 +64,11 @@ struct WeatherRepositoryTests {
 
     @Test("キャッシュキーは小数点2桁精度で正規化される（近傍座標はキャッシュヒット）")
     func fetchWeatherCacheKeyNormalization() async throws {
-        actor CallCounter { var count = 0; func increment() { count += 1 } }
+        actor CallCounter { var count = 0
+            func increment() {
+                count += 1
+            }
+        }
         let counter = CallCounter()
 
         let repo = WeatherRepository(
@@ -81,7 +88,11 @@ struct WeatherRepositoryTests {
 
     @Test("clearCache 後は API を再呼び出しする")
     func clearCacheForcesFetch() async throws {
-        actor CallCounter { var count = 0; func increment() { count += 1 } }
+        actor CallCounter { var count = 0
+            func increment() {
+                count += 1
+            }
+        }
         let counter = CallCounter()
 
         let repo = WeatherRepository(
