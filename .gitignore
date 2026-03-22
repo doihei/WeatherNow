@@ -29,7 +29,7 @@ Tools/.build/
 
 # CocoaPods
 Pods/
-*.xcworkspace
+Pods/*.xcworkspace
 
 # Carthage
 Carthage/Build/

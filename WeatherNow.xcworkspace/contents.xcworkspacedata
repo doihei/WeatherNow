@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "container:WeatherNow/WeatherNow.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "container:Packages/CoreModels">
+   </FileRef>
+   <FileRef
+      location = "container:Packages/CoreNetwork">
+   </FileRef>
+   <FileRef
+      location = "container:Packages/WeatherDomain">
+   </FileRef>
+   <FileRef
+      location = "container:Packages/CoreUI">
+   </FileRef>
+   <FileRef
+      location = "container:Packages/WeatherFeature">
+   </FileRef>
+</Workspace>
