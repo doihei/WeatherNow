@@ -260,10 +260,10 @@ Open-Meteo の Geocoding API で都市を検索して登録する。
 ## 9. 実装チェックリスト
 
 ### Phase 1：CoreModels・CoreNetwork
-- [ ] Weather・City・AppSettings など全モデルを `struct + Sendable` で定義
-- [ ] `WeatherAPIClientProtocol` を定義
-- [ ] APIClient の `liveValue`・`testValue` を実装
-- [ ] WMOコード → SF Symbols / テキスト変換ロジック（WeatherCode enum）
+- [x] Weather・City・AppSettings など全モデルを `struct + Sendable` で定義
+- [x] `WeatherAPIClientProtocol` を定義
+- [x] APIClient の `liveValue`・`testValue` を実装
+- [x] WMOコード → SF Symbols / テキスト変換ロジック（WeatherCode enum）
 
 ### Phase 2：WeatherDomain
 - [ ] `WeatherRepository` を Actor で実装（キャッシュ付き）
