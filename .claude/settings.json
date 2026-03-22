@@ -18,7 +18,8 @@
       "Edit(/.claude/skills/update-docs/**)",
       "Edit(/.claude/rules/**)",
       "Bash(Tools/.build/release/swiftlint:*)",
-      "Bash(Tools/.build/release/swiftformat:*)"
+      "Bash(Tools/.build/release/swiftformat:*)",
+      "Edit(/.claude/skills/add-tests/**)"
     ],
     "additionalDirectories": [
       "/Users/daiheidoi/dev/WeatherNow/.claude/skills"
