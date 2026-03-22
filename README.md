@@ -17,6 +17,12 @@ make format
 
 # Lint
 make lint
+
+# テスト実行
+make test           # 全パッケージ
+make test-models    # CoreModels のみ
+make test-network   # CoreNetwork のみ
+make test-domain    # WeatherDomain のみ
 ```
 
 ## SPM モジュール構成
