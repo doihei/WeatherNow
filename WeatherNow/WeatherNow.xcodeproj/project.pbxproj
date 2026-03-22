@@ -309,7 +309,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ -f \"$SRCROOT/../Tools/.build/release/swiftformat\" ]; then\n    BINARY=\"$SRCROOT/../Tools/.build/release/swiftformat\"\nelif [ -f \"$SRCROOT/../Tools/.build/debug/swiftformat\" ]; then\n    BINARY=\"$SRCROOT/../Tools/.build/debug/swiftformat\"\nelse\n    echo \"warning: swiftformat not built. Run: make bootstrap\"\n    exit 0\nfi\n\"$BINARY\" --lint --config \"$SRCROOT/../.swiftformat\" \"$SRCROOT/Sources\" \"$SRCROOT/../Packages\"\n";
+			shellScript = "if [ -f \"$SRCROOT/../Tools/.build/release/swiftformat\" ]; then\n    BINARY=\"$SRCROOT/../Tools/.build/release/swiftformat\"\nelif [ -f \"$SRCROOT/../Tools/.build/debug/swiftformat\" ]; then\n    BINARY=\"$SRCROOT/../Tools/.build/debug/swiftformat\"\nelse\n    echo \"warning: swiftformat not built. Run: make bootstrap\"\n    exit 0\nfi\n\"$BINARY\" --config \"$SRCROOT/../.swiftformat\" \"$SRCROOT/Sources\" \"$SRCROOT/../Packages\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
