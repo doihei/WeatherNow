@@ -4,6 +4,27 @@
    <FileRef
       location = "container:WeatherNow/WeatherNow.xcodeproj">
    </FileRef>
+   <FileSystemSynchronizedGroup
+      location = "group:WeatherNowTests"
+      name = "WeatherNowTests">
+   </FileSystemSynchronizedGroup>
+   <FileSystemSynchronizedGroup
+      location = "group:WeatherNowUITests"
+      name = "WeatherNowUITests">
+   </FileSystemSynchronizedGroup>
+   <Group
+      location = "container:Docs"
+      name = "Docs">
+      <FileRef
+         location = "group:api.md">
+      </FileRef>
+      <FileRef
+         location = "group:architecture.md">
+      </FileRef>
+      <FileRef
+         location = "group:spec.md">
+      </FileRef>
+   </Group>
    <FileRef
       location = "container:Packages/CoreModels">
    </FileRef>

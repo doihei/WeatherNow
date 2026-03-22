@@ -30,9 +30,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		4828DEBA2F6E48530070E544 /* api.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = api.md; sourceTree = "<group>"; };
-		4828DEBB2F6E48530070E544 /* architecture.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = architecture.md; sourceTree = "<group>"; };
-		4828DEBC2F6E48530070E544 /* spec.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = spec.md; sourceTree = "<group>"; };
 		4867E42B2F6E27F000CED32A /* WeatherNow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeatherNow.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4867E43A2F6E27F100CED32A /* WeatherNowTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WeatherNowTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4867E4442F6E27F100CED32A /* WeatherNowUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WeatherNowUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -47,18 +44,6 @@
 		4867E42D2F6E27F000CED32A /* Sources */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = Sources;
-			sourceTree = "<group>";
-		};
-		4867E43D2F6E27F100CED32A /* WeatherNowTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			name = WeatherNowTests;
-			path = ../WeatherNowTests;
-			sourceTree = "<group>";
-		};
-		4867E4472F6E27F100CED32A /* WeatherNowUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			name = WeatherNowUITests;
-			path = ../WeatherNowUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -91,26 +76,12 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		4828DEBD2F6E48530070E544 /* Docs */ = {
-			isa = PBXGroup;
-			children = (
-				4828DEBA2F6E48530070E544 /* api.md */,
-				4828DEBB2F6E48530070E544 /* architecture.md */,
-				4828DEBC2F6E48530070E544 /* spec.md */,
-			);
-			name = Docs;
-			path = ../Docs;
-			sourceTree = SOURCE_ROOT;
-		};
 		4867E4222F6E27F000CED32A = {
 			isa = PBXGroup;
 			children = (
 				4828DEB62F6E36E30070E544 /* Resources */,
 				4867E42D2F6E27F000CED32A /* Sources */,
-				4867E43D2F6E27F100CED32A /* WeatherNowTests */,
-				4867E4472F6E27F100CED32A /* WeatherNowUITests */,
 				4867E42C2F6E27F000CED32A /* Products */,
-				4828DEBD2F6E48530070E544 /* Docs */,
 			);
 			sourceTree = "<group>";
 		};
@@ -168,9 +139,6 @@
 			dependencies = (
 				4867E43C2F6E27F100CED32A /* PBXTargetDependency */,
 			);
-			fileSystemSynchronizedGroups = (
-				4867E43D2F6E27F100CED32A /* WeatherNowTests */,
-			);
 			name = WeatherNowTests;
 			packageProductDependencies = (
 			);
@@ -190,9 +158,6 @@
 			);
 			dependencies = (
 				4867E4462F6E27F100CED32A /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				4867E4472F6E27F100CED32A /* WeatherNowUITests */,
 			);
 			name = WeatherNowUITests;
 			packageProductDependencies = (
