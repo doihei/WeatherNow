@@ -266,9 +266,9 @@ Open-Meteo の Geocoding API で都市を検索して登録する。
 - [x] WMOコード → SF Symbols / テキスト変換ロジック（WeatherCode enum）
 
 ### Phase 2：WeatherDomain
-- [ ] `WeatherRepository` を Actor で実装（キャッシュ付き）
-- [ ] `LocationService` を Actor で実装
-- [ ] `WeatherError` を定義（`isRetryable`・`userMessage`）
+- [x] `WeatherRepository` を Actor で実装（キャッシュ付き）
+- [x] `LocationService` を Actor で実装
+- [x] `WeatherError` を定義（`isRetryable`・`userMessage`）
 
 ### Phase 3：MVVM 実装
 - [ ] `CurrentWeatherViewModel`

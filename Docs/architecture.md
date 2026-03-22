@@ -23,7 +23,7 @@ WeatherFeatureTCA  ─┤→ WeatherDomain → CoreNetwork → CoreModels
 | CoreModels | データモデル・エラー型・設定値 | Weather, City, AppSettings, WeatherCode, WeatherError |
 | CoreNetwork | HTTP 通信・レスポンス変換 | APIClient, WeatherAPIClient, GeocodingAPIClient, OpenMeteoEndpoint |
 | CoreUI | 共通 UI コンポーネント・モデルへの UI extension | WeatherCode+SFSymbol |
-| WeatherDomain | Repository・LocationService（未実装） | — |
+| WeatherDomain | Repository・LocationService | WeatherRepository, WeatherRepositoryProtocol, LocationService, LocationServiceProtocol |
 | WeatherFeatureMVVM | MVVM 実装の View・ViewModel（未実装） | — |
 | WeatherFeatureTCA | TCA 実装の View・Feature（未実装） | — |
 
@@ -53,7 +53,19 @@ CoreNetwork/
 
 ---
 
-## 5. MVVM vs TCA 実装方針
+## 5. WeatherDomain ファイル構成
+
+```
+WeatherDomain/
+├── Location/     — LocationService（Actor）, LocationServiceProtocol
+└── Repository/   — WeatherRepository（Actor・キャッシュ付き）, WeatherRepositoryProtocol
+```
+
+Protocol と実装を同一ディレクトリに配置する（CoreNetwork の `Protocols/` 分離とは異なる）。
+
+---
+
+## 6. MVVM vs TCA 実装方針
 
 | 関心事 | MVVM（@Observable） | TCA（@Reducer） |
 |---|---|---|
@@ -66,7 +78,7 @@ CoreNetwork/
 
 ---
 
-## 6. エラーハンドリング
+## 7. エラーハンドリング
 
 全エラーは `WeatherError` に集約する。
 
@@ -80,7 +92,7 @@ CoreNetwork/
 
 ---
 
-## 7. SF Symbols 利用方針
+## 8. SF Symbols 利用方針
 
 SF Symbols は `SFSafeSymbols` ライブラリを使って型安全に扱う。
 マッピング定義は `CoreUI` の `WeatherCode+SFSymbol.swift` に集約し、`CoreModels` には置かない。

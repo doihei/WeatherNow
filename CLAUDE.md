@@ -32,6 +32,9 @@ WeatherNow/
 │   │   └── Sources/CoreUI/
 │   │       └── Extensions/       # WeatherCode+SFSymbol など
 │   ├── WeatherDomain/            # Repository・LocationService（→ CoreModels, CoreNetwork）
+│   │   └── Sources/WeatherDomain/
+│   │       ├── Location/         # LocationService, LocationServiceProtocol
+│   │       └── Repository/       # WeatherRepository, WeatherRepositoryProtocol
 │   └── WeatherFeature/           # UI層（→ WeatherDomain, CoreUI）
 │       ├── Sources/WeatherFeatureMVVM/   # MVVM実装
 │       └── Sources/WeatherFeatureTCA/    # TCA実装
@@ -97,8 +100,11 @@ Xcode ビルド時は Run Script Phase で SwiftFormat（lint）・SwiftLint が
 
 ## 現在の実装状況
 
-- **Phase 1 完了**：CoreModels・CoreNetwork の実装済み
+- **Phase 1 完了**：CoreModels・CoreNetwork・CoreUI の実装済み
   - CoreModels：Weather / City / AppSettings / WeatherCode / WeatherError
   - CoreNetwork：APIClient / WeatherAPIClient / GeocodingAPIClient / OpenMeteoEndpoint / ForecastResponse / GeocodingResponse
   - CoreUI：WeatherCode+SFSymbol（SFSafeSymbols 使用）
-- **Phase 2 以降**：WeatherDomain・WeatherFeature（MVVM/TCA）は未着手
+- **Phase 2 完了**：WeatherDomain の実装済み
+  - WeatherRepository（Actor・キャッシュ付き）/ WeatherRepositoryProtocol
+  - LocationService（Actor・iOS 17 liveUpdates 使用）/ LocationServiceProtocol
+- **Phase 3 以降**：WeatherFeature（MVVM/TCA）は未着手

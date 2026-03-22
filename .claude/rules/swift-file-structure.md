@@ -25,6 +25,15 @@
 | `Protocols/` | XxxProtocol |
 | `Responses/` | Decodable なレスポンス構造体 |
 
+### WeatherDomain (`Packages/WeatherDomain/Sources/WeatherDomain/`)
+
+| ディレクトリ | 対象 |
+|---|---|
+| `Location/` | LocationService, LocationServiceProtocol |
+| `Repository/` | WeatherRepository, WeatherRepositoryProtocol |
+
+Protocol と実装は同じディレクトリに配置する（CoreNetwork の `Protocols/` 分離とは異なる）。
+
 ### CoreUI (`Packages/CoreUI/Sources/CoreUI/`)
 
 | ディレクトリ | 対象 |
