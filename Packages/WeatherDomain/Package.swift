@@ -5,7 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "WeatherDomain",
-    platforms: [.iOS(.v17)],
+    platforms: [.iOS(.v17), .macOS(.v14)],
     products: [
         .library(
             name: "WeatherDomain",
@@ -23,7 +23,7 @@ let package = Package(
         ),
         .testTarget(
             name: "WeatherDomainTests",
-            dependencies: ["WeatherDomain"]
+            dependencies: ["WeatherDomain", "CoreNetwork", "CoreModels"]
         ),
     ]
 )

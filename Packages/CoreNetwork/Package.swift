@@ -22,7 +22,7 @@ let package = Package(
         ),
         .testTarget(
             name: "CoreNetworkTests",
-            dependencies: ["CoreNetwork"]
+            dependencies: ["CoreNetwork", "CoreModels"]
         ),
     ]
 )
