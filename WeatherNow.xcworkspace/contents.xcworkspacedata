@@ -35,9 +35,9 @@
       location = "container:Packages/WeatherDomain">
    </FileRef>
    <FileRef
-      location = "container:Packages/CoreUI">
+      location = "container:Packages/WeatherFeature">
    </FileRef>
    <FileRef
-      location = "container:Packages/WeatherFeature">
+      location = "container:Packages/CoreUI">
    </FileRef>
 </Workspace>

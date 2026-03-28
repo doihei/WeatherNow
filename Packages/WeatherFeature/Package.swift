@@ -5,7 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "WeatherFeature",
-    platforms: [.iOS(.v17)],
+    platforms: [.iOS(.v17), .macOS(.v14)],
     products: [
         .library(name: "WeatherFeatureMVVM", targets: ["WeatherFeatureMVVM"]),
         .library(name: "WeatherFeatureTCA", targets: ["WeatherFeatureTCA"]),
@@ -24,7 +24,8 @@ let package = Package(
             dependencies: [
                 "WeatherDomain",
                 "CoreUI",
-            ]
+            ],
+            path: "Sources/MVVM"
         ),
         .target(
             name: "WeatherFeatureTCA",
@@ -32,15 +33,25 @@ let package = Package(
                 "WeatherDomain",
                 "CoreUI",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
-            ]
+            ],
+            path: "Sources/TCA"
         ),
         .testTarget(
-            name: "WeatherFeatureTests",
+            name: "WeatherFeatureMVVMTests",
             dependencies: [
                 "WeatherFeatureMVVM",
+                "WeatherDomain",
+            ],
+            path: "Tests/WeatherFeatureMVVMTests"
+        ),
+        .testTarget(
+            name: "WeatherFeatureTCATests",
+            dependencies: [
                 "WeatherFeatureTCA",
+                "WeatherDomain",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
-            ]
+            ],
+            path: "Tests/WeatherFeatureTCATests"
         ),
     ]
 )
