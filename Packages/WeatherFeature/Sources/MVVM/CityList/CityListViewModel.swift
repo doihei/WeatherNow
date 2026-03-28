@@ -1,4 +1,5 @@
 import CoreModels
+import Dependencies
 import Foundation
 import Observation
 import WeatherDomain
@@ -16,8 +17,11 @@ public final class CityListViewModel {
 
     // MARK: - Dependencies
 
-    private let repository: any WeatherRepositoryProtocol
-    private let cityListService: any CityListServiceProtocol
+    @ObservationIgnored
+    @Dependency(\.weatherRepository) private var repository
+
+    @ObservationIgnored
+    @Dependency(\.cityListService) private var cityListService
 
     // MARK: - Task Management
 
@@ -29,13 +33,13 @@ public final class CityListViewModel {
 
     // MARK: - Init
 
-    public init(
-        repository: any WeatherRepositoryProtocol,
-        cityListService: any CityListServiceProtocol = CityListService()
-    ) {
-        self.repository = repository
-        self.cityListService = cityListService
-        self.cities = cityListService.load()
+    public init() {}
+
+    // MARK: - Load
+
+    /// 永続化された都市リストを読み込む。View の .task / .onAppear から呼ぶ。
+    public func loadCities() {
+        cities = cityListService.load()
     }
 
     // MARK: - City Management

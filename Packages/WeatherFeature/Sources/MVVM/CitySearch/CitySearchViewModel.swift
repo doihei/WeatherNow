@@ -1,4 +1,5 @@
 import CoreModels
+import Dependencies
 import Observation
 import WeatherDomain
 
@@ -16,7 +17,9 @@ public final class CitySearchViewModel {
 
     // MARK: - Dependencies
 
-    private let repository: any WeatherRepositoryProtocol
+    @ObservationIgnored
+    @Dependency(\.weatherRepository) private var repository
+
     private let cityListViewModel: CityListViewModel
 
     // MARK: - Task Management
@@ -29,11 +32,7 @@ public final class CitySearchViewModel {
 
     // MARK: - Init
 
-    public init(
-        repository: any WeatherRepositoryProtocol,
-        cityListViewModel: CityListViewModel
-    ) {
-        self.repository = repository
+    public init(cityListViewModel: CityListViewModel) {
         self.cityListViewModel = cityListViewModel
     }
 

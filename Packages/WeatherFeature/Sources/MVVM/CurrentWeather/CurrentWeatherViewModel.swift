@@ -1,5 +1,6 @@
 import CoreLocation
 import CoreModels
+import Dependencies
 import Observation
 import WeatherDomain
 
@@ -24,8 +25,11 @@ public final class CurrentWeatherViewModel {
 
     // MARK: - Dependencies
 
-    private let repository: any WeatherRepositoryProtocol
-    private let locationService: any LocationServiceProtocol
+    @ObservationIgnored
+    @Dependency(\.weatherRepository) private var repository
+
+    @ObservationIgnored
+    @Dependency(\.locationService) private var locationService
 
     // MARK: - Task Management
 
@@ -37,13 +41,7 @@ public final class CurrentWeatherViewModel {
 
     // MARK: - Init
 
-    public init(
-        repository: any WeatherRepositoryProtocol,
-        locationService: any LocationServiceProtocol
-    ) {
-        self.repository = repository
-        self.locationService = locationService
-    }
+    public init() {}
 
     // MARK: - Actions
 

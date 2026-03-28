@@ -17,6 +17,10 @@ let package = Package(
             url: "https://github.com/pointfreeco/swift-composable-architecture",
             from: "1.17.0"
         ),
+        .package(
+            url: "https://github.com/pointfreeco/swift-dependencies",
+            from: "1.0.0"
+        ),
     ],
     targets: [
         .target(
@@ -24,6 +28,7 @@ let package = Package(
             dependencies: [
                 "WeatherDomain",
                 "CoreUI",
+                .product(name: "Dependencies", package: "swift-dependencies"),
             ],
             path: "Sources/MVVM"
         ),
@@ -41,6 +46,7 @@ let package = Package(
             dependencies: [
                 "WeatherFeatureMVVM",
                 "WeatherDomain",
+                .product(name: "Dependencies", package: "swift-dependencies"),
             ],
             path: "Tests/WeatherFeatureMVVMTests"
         ),

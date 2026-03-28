@@ -1,4 +1,5 @@
 import CoreModels
+import Dependencies
 import SwiftUI
 import WeatherDomain
 
@@ -23,7 +24,7 @@ public final class AppViewModel {
 
     // MARK: - Settings
 
-    public var settings: AppSettings
+    public var settings: AppSettings = .default
 
     // MARK: - Child ViewModels
 
@@ -32,30 +33,22 @@ public final class AppViewModel {
 
     // MARK: - Dependencies
 
-    private let repository: any WeatherRepositoryProtocol
-    private let locationService: any LocationServiceProtocol
-    private let settingsService: any AppSettingsServiceProtocol
+    @ObservationIgnored
+    @Dependency(\.appSettingsService) private var settingsService
 
     // MARK: - Init
 
-    public init(
-        repository: any WeatherRepositoryProtocol,
-        locationService: any LocationServiceProtocol,
-        settingsService: any AppSettingsServiceProtocol = AppSettingsService(),
-        cityListService: any CityListServiceProtocol = CityListService()
-    ) {
-        self.repository = repository
-        self.locationService = locationService
-        self.settingsService = settingsService
-        self.settings = settingsService.load()
-        self.cityListViewModel = CityListViewModel(repository: repository, cityListService: cityListService)
-        self.currentWeatherViewModel = CurrentWeatherViewModel(
-            repository: repository,
-            locationService: locationService
-        )
+    public init() {
+        self.cityListViewModel = CityListViewModel()
+        self.currentWeatherViewModel = CurrentWeatherViewModel()
     }
 
-    // MARK: - Settings Persistence
+    // MARK: - Settings
+
+    /// 永続化された設定を読み込む。View の .task / .onAppear から呼ぶ。
+    public func loadSettings() {
+        settings = settingsService.load()
+    }
 
     public func saveSettings() {
         settingsService.save(settings)
@@ -64,6 +57,6 @@ public final class AppViewModel {
     // MARK: - Factory
 
     public func makeCitySearchViewModel() -> CitySearchViewModel {
-        CitySearchViewModel(repository: repository, cityListViewModel: cityListViewModel)
+        CitySearchViewModel(cityListViewModel: cityListViewModel)
     }
 }
