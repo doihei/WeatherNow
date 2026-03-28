@@ -5,10 +5,11 @@ import Testing
 
 @MainActor
 struct CityListViewModelTests {
-    private func makeFreshViewModel(repository: StubWeatherRepository = StubWeatherRepository()) -> CityListViewModel {
-        // UserDefaults.standard の残留データをクリアして独立したテスト状態を作る
-        UserDefaults.standard.removeObject(forKey: "registeredCities")
-        return CityListViewModel(repository: repository)
+    private func makeFreshViewModel(
+        repository: StubWeatherRepository = StubWeatherRepository(),
+        cityListService: StubCityListService = StubCityListService()
+    ) -> CityListViewModel {
+        CityListViewModel(repository: repository, cityListService: cityListService)
     }
 
     // MARK: - add
@@ -50,6 +51,14 @@ struct CityListViewModelTests {
         #expect(vm.errorMessage != nil)
     }
 
+    @Test("add で都市追加時に cityListService.save が呼ばれる")
+    func addPersistsCities() {
+        let service = StubCityListService()
+        let vm = makeFreshViewModel(cityListService: service)
+        vm.add(.stub(id: 1))
+        #expect(service.savedCities?.count == 1)
+    }
+
     // MARK: - remove
 
     @Test("remove で指定 IndexSet の都市が削除される")
@@ -60,6 +69,15 @@ struct CityListViewModelTests {
         vm.remove(at: IndexSet(integer: 0))
         #expect(vm.cities.count == 1)
         #expect(vm.cities[0].id == 2)
+    }
+
+    @Test("remove で都市削除時に cityListService.save が呼ばれる")
+    func removePersistsCities() {
+        let service = StubCityListService()
+        let vm = makeFreshViewModel(cityListService: service)
+        vm.add(.stub(id: 1))
+        vm.remove(at: IndexSet(integer: 0))
+        #expect(service.savedCities?.isEmpty == true)
     }
 
     // MARK: - move
@@ -91,6 +109,17 @@ struct CityListViewModelTests {
         #expect(!vm.isCityAdded(.stub(id: 99)))
     }
 
+    // MARK: - 初期ロード
+
+    @Test("init で cityListService.load の結果が cities に反映される")
+    func initLoadsCitiesFromService() {
+        let city = GeocodingResult.stub(id: 42).toCity()
+        let service = StubCityListService(cities: [city])
+        let vm = makeFreshViewModel(cityListService: service)
+        #expect(vm.cities.count == 1)
+        #expect(vm.cities[0].id == 42)
+    }
+
     // MARK: - loadAllWeather
 
     @Test("loadAllWeather で登録都市の天気が citiesWeather に格納される")
@@ -103,7 +132,6 @@ struct CityListViewModelTests {
         vm.add(.stub(id: 2, latitude: 34.69, longitude: 135.50))
 
         vm.loadAllWeather()
-        // Task 完了を待つ
         try await Task.sleep(for: .milliseconds(100))
 
         #expect(vm.citiesWeather[1] == stub)

@@ -48,6 +48,25 @@ final class StubAppSettingsService: AppSettingsServiceProtocol, @unchecked Senda
     }
 }
 
+// MARK: - StubCityListService
+
+final class StubCityListService: CityListServiceProtocol, @unchecked Sendable {
+    private(set) var savedCities: [City]?
+    var citiesToLoad: [City]
+
+    init(cities: [City] = []) {
+        self.citiesToLoad = cities
+    }
+
+    func load() -> [City] {
+        citiesToLoad
+    }
+
+    func save(_ cities: [City]) {
+        savedCities = cities
+    }
+}
+
 // MARK: - Stub Factories
 
 extension Weather {
