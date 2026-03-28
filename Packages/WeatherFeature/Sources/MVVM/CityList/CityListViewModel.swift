@@ -17,6 +17,7 @@ public final class CityListViewModel {
     // MARK: - Dependencies
 
     private let repository: any WeatherRepositoryProtocol
+    private let cityListService: any CityListServiceProtocol
 
     // MARK: - Task Management
 
@@ -26,15 +27,15 @@ public final class CityListViewModel {
 
     private var tasks: [TaskKey: Task<Void, Never>] = [:]
 
-    // MARK: - Persistence
-
-    private static let citiesKey = "registeredCities"
-
     // MARK: - Init
 
-    public init(repository: any WeatherRepositoryProtocol) {
+    public init(
+        repository: any WeatherRepositoryProtocol,
+        cityListService: any CityListServiceProtocol = CityListService()
+    ) {
         self.repository = repository
-        loadPersistedCities()
+        self.cityListService = cityListService
+        self.cities = cityListService.load()
     }
 
     // MARK: - City Management
@@ -48,19 +49,19 @@ public final class CityListViewModel {
         let city = result.toCity()
         guard !cities.contains(where: { $0.id == city.id }) else { return }
         cities.append(city)
-        persistCities()
+        cityListService.save(cities)
     }
 
     /// 都市を削除する。
     public func remove(at offsets: IndexSet) {
         cities.remove(atOffsets: offsets)
-        persistCities()
+        cityListService.save(cities)
     }
 
     /// 都市の並び順を変更する。
     public func move(from source: IndexSet, to destination: Int) {
         cities.move(fromOffsets: source, toOffset: destination)
-        persistCities()
+        cityListService.save(cities)
     }
 
     /// 検索結果がすでに登録済みかどうかを返す。
@@ -84,20 +85,5 @@ public final class CityListViewModel {
                 }
             }
         }
-    }
-
-    // MARK: - Persistence
-
-    private func loadPersistedCities() {
-        guard
-            let data = UserDefaults.standard.data(forKey: Self.citiesKey),
-            let decoded = try? JSONDecoder().decode([City].self, from: data)
-        else { return }
-        cities = decoded
-    }
-
-    private func persistCities() {
-        guard let data = try? JSONEncoder().encode(cities) else { return }
-        UserDefaults.standard.set(data, forKey: Self.citiesKey)
     }
 }

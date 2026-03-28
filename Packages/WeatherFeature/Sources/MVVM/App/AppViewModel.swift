@@ -41,13 +41,14 @@ public final class AppViewModel {
     public init(
         repository: any WeatherRepositoryProtocol,
         locationService: any LocationServiceProtocol,
-        settingsService: any AppSettingsServiceProtocol = AppSettingsService()
+        settingsService: any AppSettingsServiceProtocol = AppSettingsService(),
+        cityListService: any CityListServiceProtocol = CityListService()
     ) {
         self.repository = repository
         self.locationService = locationService
         self.settingsService = settingsService
         self.settings = settingsService.load()
-        self.cityListViewModel = CityListViewModel(repository: repository)
+        self.cityListViewModel = CityListViewModel(repository: repository, cityListService: cityListService)
         self.currentWeatherViewModel = CurrentWeatherViewModel(
             repository: repository,
             locationService: locationService
