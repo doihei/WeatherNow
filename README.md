@@ -4,7 +4,7 @@ Open-Meteo API を使った iOS 天気予報アプリ。MVVM + @Observable と T
 
 - **iOS 17+** / Swift 6
 - **API:** Open-Meteo（認証不要・無料）
-- **外部ライブラリ:** [The Composable Architecture](https://github.com/pointfreeco/swift-composable-architecture) / [SFSafeSymbols](https://github.com/SFSafeSymbols/SFSafeSymbols)
+- **外部ライブラリ:** [The Composable Architecture](https://github.com/pointfreeco/swift-composable-architecture) / [SFSafeSymbols](https://github.com/SFSafeSymbols/SFSafeSymbols) / [swift-dependencies](https://github.com/pointfreeco/swift-dependencies)
 
 ## セットアップ
 

@@ -99,7 +99,10 @@ vm.saveSettings()
 
 // StubCityListService — final class。savedCities で保存内容を検証できる
 let cityService = StubCityListService(cities: [])
-let vm = CityListViewModel(repository: repo, cityListService: cityService)
+let vm = withDependencies {
+    $0.weatherRepository = repo
+    $0.cityListService = cityService
+} operation: { CityListViewModel() }
 vm.add(.stub(id: 1))
 #expect(cityService.savedCities?.count == 1)
 ```
@@ -131,12 +134,18 @@ struct CityListViewModelTests {
         repository: StubWeatherRepository = StubWeatherRepository(),
         cityListService: StubCityListService = StubCityListService()
     ) -> CityListViewModel {
-        CityListViewModel(repository: repository, cityListService: cityListService)
+        withDependencies {
+            $0.weatherRepository = repository
+            $0.cityListService = cityListService
+        } operation: {
+            CityListViewModel()
+        }
     }
 
     @Test("add で都市が1件追加される")
     func addCity() {
         let vm = makeFreshViewModel()
+        vm.loadCities()
         vm.add(.stub(id: 1))
         #expect(vm.cities.count == 1)
     }

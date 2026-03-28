@@ -23,7 +23,7 @@ make test-feature-tca   # TCA のみ
 
 ## アーキテクチャ
 
-- **MVVM**：`@Observable` ViewModel + NavigationPath。DI は init 引数で Protocol 注入
+- **MVVM**：`@Observable` ViewModel + NavigationPath。DI は `@Dependency`（swift-dependencies）で注入
 - **TCA**：`@Reducer` + StackState + CancelID。DI は `@Dependency`（`testValue` 必須）
 
 ## 実装状況

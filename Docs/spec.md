@@ -222,7 +222,7 @@ Open-Meteo の Geocoding API で都市を検索して登録する。
 - 各画面に対応する ViewModel を `@Observable` で定義
 - 非同期処理は `Task` + `TaskKey`（Dictionary 管理）
 - ナビゲーションは `AppViewModel` が `NavigationPath` を保持（Tab ごとに分割）
-- DI は init 引数で Protocol を注入
+- DI は `@Dependency`（swift-dependencies）で注入
 - エラーは `errorMessage: String?` で State に保持
 - debounce は `Task.sleep` + `checkCancellation()` で実装
 
