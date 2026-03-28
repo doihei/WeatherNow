@@ -1,3 +1,8 @@
+---
+paths:
+  - Packages/**/*.swift
+---
+
 # Swift ファイル構成ルール
 
 ## 1モデル1ファイル原則
@@ -31,6 +36,7 @@
 |---|---|
 | `Location/` | LocationService, LocationServiceProtocol |
 | `Repository/` | WeatherRepository, WeatherRepositoryProtocol |
+| `Settings/` | AppSettingsService, AppSettingsServiceProtocol |
 
 Protocol と実装は同じディレクトリに配置する（CoreNetwork の `Protocols/` 分離とは異なる）。
 
@@ -40,8 +46,38 @@ Protocol と実装は同じディレクトリに配置する（CoreNetwork の `
 |---|---|
 | `Extensions/` | 他モジュール型への extension |
 
+### WeatherFeature (`Packages/WeatherFeature/`)
+
+ソースは **画面モジュール単位**のサブディレクトリで管理する。Phase 5 で View を追加する際は同じディレクトリに置く。
+
+```
+Sources/
+├── MVVM/               # SPM target: WeatherFeatureMVVM
+│   ├── App/            # AppViewModel
+│   ├── CurrentWeather/ # CurrentWeatherViewModel（+ 将来: CurrentWeatherView）
+│   ├── WeeklyForecast/ # WeeklyForecastViewModel
+│   ├── CitySearch/     # CitySearchViewModel
+│   └── CityList/       # CityListViewModel
+└── TCA/                # SPM target: WeatherFeatureTCA（Phase 4）
+
+Tests/
+├── WeatherFeatureMVVMTests/  # MVVM ViewModel テスト
+│   └── Stubs.swift           # 共有スタブ・ファクトリ
+└── WeatherFeatureTCATests/   # TCA Feature テスト（Phase 4）
+```
+
+SPM target のデフォルトパス（`Sources/<TargetName>/`）と異なるため、Package.swift で `path:` を明示する。
+
+```swift
+.target(name: "WeatherFeatureMVVM", ..., path: "Sources/MVVM")
+.target(name: "WeatherFeatureTCA",  ..., path: "Sources/TCA")
+.testTarget(name: "WeatherFeatureMVVMTests", ..., path: "Tests/WeatherFeatureMVVMTests")
+.testTarget(name: "WeatherFeatureTCATests",  ..., path: "Tests/WeatherFeatureTCATests")
+```
+
 ## ファイル命名規則
 
 - 通常のファイル: `TypeName.swift`
 - Extension ファイル: `Type+Feature.swift`（例: `WeatherCode+SFSymbol.swift`）
 - Protocol ファイル: `TypeNameProtocol.swift`（例: `WeatherAPIClientProtocol.swift`）
+- テスト共有スタブ: `Stubs.swift`（各テストターゲットに1ファイル）

@@ -1,3 +1,8 @@
+---
+paths:
+  - Packages/*/Tests/**/*.swift
+---
+
 # Swift Testing 規約
 
 ## フレームワーク
