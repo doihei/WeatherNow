@@ -1,6 +1,10 @@
-# update-docs: ドキュメント一括更新
+---
+name: update-docs
+description: コミット履歴・差分をもとに CLAUDE.md・README・Docs/・.claude/ のドキュメントを最新状態に同期する。
+disable-model-invocation: true
+---
 
-コミット履歴・差分をもとに、プロジェクト根幹ドキュメントを最新状態に同期するスキル。
+# update-docs: ドキュメント一括更新
 
 ## 手順
 

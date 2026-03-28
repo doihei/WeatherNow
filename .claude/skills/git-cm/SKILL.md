@@ -1,6 +1,10 @@
-# git-cm: スマート Git コミット
+---
+name: git-cm
+description: git add からコミットまでを自動化。lint・format チェック後、変更を適切な粒度でコミットにまとめる。
+disable-model-invocation: true
+---
 
-`git add` からコミットまでを自動で行い、変更を適切な粒度でコミットにまとめるスキル。
+# git-cm: スマート Git コミット
 
 ## 手順
 

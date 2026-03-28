@@ -1,3 +1,9 @@
+---
+paths:
+  - Packages/**/*.swift
+  - "**/Package.swift"
+---
+
 # Swift レイヤー責務ルール
 
 ## モジュール依存方向

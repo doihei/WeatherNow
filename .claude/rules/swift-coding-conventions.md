@@ -1,3 +1,8 @@
+---
+paths:
+  - Packages/**/*.swift
+---
+
 # Swift コーディング規約
 
 ## モデル定義

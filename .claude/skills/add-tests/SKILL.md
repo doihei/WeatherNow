@@ -1,6 +1,10 @@
-# add-tests: Swift Testing テスト追加・更新
+---
+name: add-tests
+description: 対象モジュールの Swift Testing テストを追加・更新する。swift-testing-conventions.md に従い、テスト設計からテスト実行・結果報告まで行う。
+argument-hint: "[モジュール名 or 型名]"
+---
 
-対象モジュールのソースコードを読み込み、`.claude/rules/swift-testing-conventions.md` に従って Swift Testing のテストを追加または更新するスキル。
+# add-tests: Swift Testing テスト追加・更新
 
 ## 手順
 
