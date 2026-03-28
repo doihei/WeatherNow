@@ -271,11 +271,11 @@ Open-Meteo の Geocoding API で都市を検索して登録する。
 - [x] `WeatherError` を定義（`isRetryable`・`userMessage`）
 
 ### Phase 3：MVVM 実装
-- [ ] `CurrentWeatherViewModel`
-- [ ] `WeeklyForecastViewModel`
-- [ ] `CitySearchViewModel`（debounce 300ms）
-- [ ] `CityListViewModel`（並び替え・削除）
-- [ ] `AppViewModel`（NavigationPath・Tab 管理）
+- [x] `CurrentWeatherViewModel`
+- [x] `WeeklyForecastViewModel`
+- [x] `CitySearchViewModel`（debounce 300ms）
+- [x] `CityListViewModel`（並び替え・削除）
+- [x] `AppViewModel`（NavigationPath・Tab 管理）
 
 ### Phase 4：TCA 実装
 - [ ] `CurrentWeatherFeature`
@@ -295,15 +295,20 @@ Open-Meteo の Geocoding API で都市を検索して登録する。
 
 ## 10. 学習ポイント対応表
 
-| 学習内容 | 対応する実装箇所 |
-|---|---|
-| Actor 再入性（Day 1） | WeatherRepository のキャッシュ設計 |
-| TCA vs MVVM（Day 2） | Phase 3・4 の比較実装 |
-| SPM モジュール分割（Day 3） | 6モジュール構成 |
-| TestClock（Day 4） | debounce・タイムアウトのテスト |
-| DI 設計（Day 5） | APIClient の Protocol 化 |
-| Swift 6 Sendable（Day 6） | 全モデルの struct + Sendable |
-| エラー設計・Task 管理（Day 7） | WeatherError・TaskKey / CancelID |
-| NavigationStack（Day 8-9） | RootFeature の StackState / AppViewModel の NavigationPath |
-| TabView 設計（Day 10） | 3タブ × 独立 NavigationStack |
-| TCA Feature 合成（Day 11） | CityListFeature の forEach | 
+| 学習内容 | 対応する実装箇所 | 習得日 |
+|---|---|---|
+| Actor 再入性・構造化並行性 | WeatherRepository のキャッシュ設計・再入性バグ防止 | Day 1 |
+| TCA vs MVVM + @Observable | Phase 3・4 の比較実装・@Bindable vs let の使い分け | Day 2・11 |
+| SPM モジュール分割設計 | 6モジュール構成・依存は下向きのみ | Day 3 |
+| TestClock・テスト戦略 | debounce・タイムアウト・actor CallCounter・zip パラメータ化 | Day 4・14 |
+| DI 設計・@Dependency | APIClient の Protocol 化・liveValue / testValue・DependencyValues override | Day 5 |
+| Swift 6 Sendable | 全モデルの struct + Sendable・@Model クラスは Actor 境界内に閉じ込める | Day 6 |
+| エラー設計・Task 管理 | WeatherError（isRetryable・userMessage）・TaskKey / CancelID | Day 7 |
+| NavigationStack 設計 | RootFeature の StackState / AppViewModel の Tab 別 NavigationPath | Day 8-9 |
+| TabView・ディープリンク・Push 通知 | 3タブ × 独立 NavigationStack・pendingDeepLink 保持型 | Day 10 |
+| TCA Feature 合成 | CityListFeature の forEach・IdentifiedArrayOf・子→親 Action 委譲 | Day 11 |
+| AsyncStream 設計 | CityStore の更新通知・CLLocationManager ラップ・循環参照の根本解決 | Day 6・15 |
+| メモリリーク・retain cycle | Task の deinit キャンセル・delegate より AsyncStream・.task で自動連動 | Day 15 |
+| SwiftData 設計 | CityRecord（@Model）を Domain 層に閉じ込める・ModelContext(container) で都度生成・@MainActor 不要 | Day 15 |
+| テスト設計原則 | 1テスト1関心事・境界値・UUID 隔離・static stub・抜け漏れ検知 | Day 14 |
+| Xcode ビルド最適化 | モジュール並列コンパイル・-warn-long-function-bodies・Explicit Module Builds | Day 15 |

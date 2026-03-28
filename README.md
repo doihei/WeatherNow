@@ -19,10 +19,13 @@ make format
 make lint
 
 # テスト実行
-make test           # 全パッケージ
-make test-models    # CoreModels のみ
-make test-network   # CoreNetwork のみ
-make test-domain    # WeatherDomain のみ
+make test               # 全パッケージ
+make test-models        # CoreModels のみ
+make test-network       # CoreNetwork のみ
+make test-domain        # WeatherDomain のみ
+make test-feature       # WeatherFeature（MVVM + TCA）
+make test-feature-mvvm  # WeatherFeature MVVM のみ
+make test-feature-tca   # WeatherFeature TCA のみ
 ```
 
 ## SPM モジュール構成
