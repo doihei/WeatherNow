@@ -34,6 +34,7 @@ paths:
 
 | ディレクトリ | 対象 |
 |---|---|
+| `CityList/` | CityListService, CityListServiceProtocol |
 | `Location/` | LocationService, LocationServiceProtocol |
 | `Repository/` | WeatherRepository, WeatherRepositoryProtocol |
 | `Settings/` | AppSettingsService, AppSettingsServiceProtocol |
