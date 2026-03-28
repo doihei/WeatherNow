@@ -1,4 +1,5 @@
 import CoreModels
+import Dependencies
 import Foundation
 import Testing
 @testable import WeatherFeatureMVVM
@@ -8,10 +9,14 @@ struct CitySearchViewModelTests {
     private func makeSUT(
         repository: StubWeatherRepository = StubWeatherRepository()
     ) -> (vm: CitySearchViewModel, cityListVM: CityListViewModel) {
-        UserDefaults.standard.removeObject(forKey: "registeredCities")
-        let cityListVM = CityListViewModel(repository: repository)
-        let vm = CitySearchViewModel(repository: repository, cityListViewModel: cityListVM)
-        return (vm, cityListVM)
+        withDependencies {
+            $0.weatherRepository = repository
+            $0.cityListService = StubCityListService()
+        } operation: {
+            let cityListVM = CityListViewModel()
+            let vm = CitySearchViewModel(cityListViewModel: cityListVM)
+            return (vm, cityListVM)
+        }
     }
 
     // MARK: - updateQuery

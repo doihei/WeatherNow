@@ -1,4 +1,5 @@
 import CoreModels
+import Dependencies
 import Foundation
 import Testing
 @testable import WeatherFeatureMVVM
@@ -9,7 +10,12 @@ struct CityListViewModelTests {
         repository: StubWeatherRepository = StubWeatherRepository(),
         cityListService: StubCityListService = StubCityListService()
     ) -> CityListViewModel {
-        CityListViewModel(repository: repository, cityListService: cityListService)
+        withDependencies {
+            $0.weatherRepository = repository
+            $0.cityListService = cityListService
+        } operation: {
+            CityListViewModel()
+        }
     }
 
     // MARK: - add
@@ -109,13 +115,22 @@ struct CityListViewModelTests {
         #expect(!vm.isCityAdded(.stub(id: 99)))
     }
 
-    // MARK: - 初期ロード
+    // MARK: - loadCities
 
-    @Test("init で cityListService.load の結果が cities に反映される")
-    func initLoadsCitiesFromService() {
+    @Test("init 直後の cities は空")
+    func initCitiesIsEmpty() {
         let city = GeocodingResult.stub(id: 42).toCity()
         let service = StubCityListService(cities: [city])
         let vm = makeFreshViewModel(cityListService: service)
+        #expect(vm.cities.isEmpty)
+    }
+
+    @Test("loadCities で cityListService.load の結果が cities に反映される")
+    func loadCitiesLoadsFromService() {
+        let city = GeocodingResult.stub(id: 42).toCity()
+        let service = StubCityListService(cities: [city])
+        let vm = makeFreshViewModel(cityListService: service)
+        vm.loadCities()
         #expect(vm.cities.count == 1)
         #expect(vm.cities[0].id == 42)
     }
