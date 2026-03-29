@@ -23,8 +23,8 @@ WeatherFeatureTCA  ─┤→ WeatherDomain → CoreNetwork → CoreModels
 | CoreModels | データモデル・エラー型・設定値 | Weather, City, AppSettings, WeatherCode, WeatherError |
 | CoreNetwork | HTTP 通信・レスポンス変換 | APIClient, WeatherAPIClient, GeocodingAPIClient, OpenMeteoEndpoint |
 | CoreUI | 共通 UI コンポーネント・モデルへの UI extension | WeatherCode+SFSymbol |
-| WeatherDomain | Repository・LocationService | WeatherRepository, WeatherRepositoryProtocol, LocationService, LocationServiceProtocol |
-| WeatherFeatureMVVM | MVVM 実装の View・ViewModel（未実装） | — |
+| WeatherDomain | Repository・LocationService・AppSettingsService・CityListService | WeatherRepository, LocationService, AppSettingsService, CityListService |
+| WeatherFeatureMVVM | MVVM 実装の View・ViewModel | AppViewModel, CityListViewModel, CitySearchViewModel, CurrentWeatherViewModel, WeeklyForecastViewModel |
 | WeatherFeatureTCA | TCA 実装の View・Feature（未実装） | — |
 
 ---
@@ -45,10 +45,11 @@ CoreModels/
 
 ```
 CoreNetwork/
-├── Clients/     — APIClient（ベース HTTP）, LiveXxxClient, TestXxxClient
-├── Endpoints/   — OpenMeteoEndpoint（URL・クエリパラメータ定義）
-├── Protocols/   — WeatherAPIClientProtocol, GeocodingAPIClientProtocol
-└── Responses/   — ForecastResponse, GeocodingResponse（Decodable）
+├── Clients/              — APIClient（ベース HTTP）, LiveXxxClient, TestXxxClient
+├── Endpoints/            — OpenMeteoEndpoint（URL・クエリパラメータ定義）
+├── Protocols/            — WeatherAPIClientProtocol, GeocodingAPIClientProtocol
+├── Protocols/Dependencies/ — XxxClient+Dependency.swift（DependencyKey 定義）
+└── Responses/            — ForecastResponse, GeocodingResponse（Decodable）
 ```
 
 ---
@@ -57,11 +58,13 @@ CoreNetwork/
 
 ```
 WeatherDomain/
-├── Location/     — LocationService（Actor）, LocationServiceProtocol
-└── Repository/   — WeatherRepository（Actor・キャッシュ付き）, WeatherRepositoryProtocol
+├── CityList/     — CityListService, CityListServiceProtocol, CityListService+Dependency
+├── Location/     — LocationService（Actor）, LocationServiceProtocol, LocationService+Dependency
+├── Repository/   — WeatherRepository（Actor・キャッシュ付き）, WeatherRepositoryProtocol, WeatherRepository+Dependency
+└── Settings/     — AppSettingsService, AppSettingsServiceProtocol, AppSettingsService+Dependency
 ```
 
-Protocol と実装を同一ディレクトリに配置する（CoreNetwork の `Protocols/` 分離とは異なる）。
+Protocol・実装・DependencyKey を同一ディレクトリに配置する（CoreNetwork の `Protocols/` 分離とは異なる）。
 
 ---
 
@@ -72,7 +75,7 @@ Protocol と実装を同一ディレクトリに配置する（CoreNetwork の `
 | 状態管理 | `@Observable` ViewModel | `State` struct |
 | 非同期処理 | `Task` + TaskKey | `.run { }` + `.cancellable(id:)` |
 | ナビゲーション | `AppViewModel` が `NavigationPath` を保持 | `RootFeature` が `StackState` を管理 |
-| DI | init 引数で Protocol を注入 | `@Dependency` で注入（`testValue` 必須） |
+| DI | `@Dependency` で注入（`testValue` 必須） | `@Dependency` で注入（`testValue` 必須） |
 | debounce | `Task.sleep` + `checkCancellation()` | `.debounce(id:, for:, scheduler:)` |
 | 都市リスト | `[City]` を直接管理 | `IdentifiedArrayOf` + `.forEach` |
 
