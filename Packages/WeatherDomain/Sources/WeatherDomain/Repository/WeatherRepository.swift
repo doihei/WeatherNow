@@ -1,24 +1,19 @@
 import CoreModels
 import CoreNetwork
+import Dependencies
 import Foundation
 
 // MARK: - WeatherRepository
 
 public actor WeatherRepository: WeatherRepositoryProtocol {
-    private let weatherClient: any WeatherAPIClientProtocol
-    private let geocodingClient: any GeocodingAPIClientProtocol
+    @Dependency(\.weatherAPIClient) private var weatherClient
+    @Dependency(\.geocodingAPIClient) private var geocodingClient
 
     // キー: "lat,lon"（小数点2桁で丸め）、値: (天気データ, キャッシュ日時)
     private var cache: [String: (weather: Weather, cachedAt: Date)] = [:]
     private let cacheDuration: TimeInterval = 600 // 10分
 
-    public init(
-        weatherClient: any WeatherAPIClientProtocol,
-        geocodingClient: any GeocodingAPIClientProtocol
-    ) {
-        self.weatherClient = weatherClient
-        self.geocodingClient = geocodingClient
-    }
+    public init() {}
 
     // MARK: - WeatherRepositoryProtocol
 

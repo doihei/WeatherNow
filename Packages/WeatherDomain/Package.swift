@@ -15,15 +15,28 @@ let package = Package(
     dependencies: [
         .package(path: "../CoreModels"),
         .package(path: "../CoreNetwork"),
+        .package(
+            url: "https://github.com/pointfreeco/swift-dependencies",
+            from: "1.0.0"
+        ),
     ],
     targets: [
         .target(
             name: "WeatherDomain",
-            dependencies: ["CoreModels", "CoreNetwork"]
+            dependencies: [
+                "CoreModels",
+                "CoreNetwork",
+                .product(name: "Dependencies", package: "swift-dependencies"),
+            ]
         ),
         .testTarget(
             name: "WeatherDomainTests",
-            dependencies: ["WeatherDomain", "CoreNetwork", "CoreModels"]
+            dependencies: [
+                "WeatherDomain",
+                "CoreNetwork",
+                "CoreModels",
+                .product(name: "Dependencies", package: "swift-dependencies"),
+            ]
         ),
     ]
 )

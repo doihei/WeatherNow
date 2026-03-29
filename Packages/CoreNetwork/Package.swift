@@ -14,11 +14,18 @@ let package = Package(
     ],
     dependencies: [
         .package(path: "../CoreModels"),
+        .package(
+            url: "https://github.com/pointfreeco/swift-dependencies",
+            from: "1.0.0"
+        ),
     ],
     targets: [
         .target(
             name: "CoreNetwork",
-            dependencies: ["CoreModels"]
+            dependencies: [
+                "CoreModels",
+                .product(name: "Dependencies", package: "swift-dependencies"),
+            ]
         ),
         .testTarget(
             name: "CoreNetworkTests",
