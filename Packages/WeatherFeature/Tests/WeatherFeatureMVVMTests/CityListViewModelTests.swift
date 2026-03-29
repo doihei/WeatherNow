@@ -2,17 +2,18 @@ import CoreModels
 import Dependencies
 import Foundation
 import Testing
+import WeatherDomain
 @testable import WeatherFeatureMVVM
 
 @MainActor
 struct CityListViewModelTests {
     private func makeFreshViewModel(
         repository: StubWeatherRepository = StubWeatherRepository(),
-        cityListService: StubCityListService = StubCityListService()
+        cityListDefaults: UserDefaults = UserDefaults(suiteName: "test_\(UUID().uuidString)")!
     ) -> CityListViewModel {
         withDependencies {
             $0.weatherRepository = repository
-            $0.cityListService = cityListService
+            $0.cityListService = CityListService(defaults: cityListDefaults)
         } operation: {
             CityListViewModel()
         }
@@ -57,12 +58,12 @@ struct CityListViewModelTests {
         #expect(vm.errorMessage != nil)
     }
 
-    @Test("add で都市追加時に cityListService.save が呼ばれる")
-    func addPersistsCities() {
-        let service = StubCityListService()
-        let vm = makeFreshViewModel(cityListService: service)
+    @Test("add で都市が永続化される")
+    func addPersistsCities() throws {
+        let defaults = try #require(UserDefaults(suiteName: "test_\(UUID().uuidString)"))
+        let vm = makeFreshViewModel(cityListDefaults: defaults)
         vm.add(.stub(id: 1))
-        #expect(service.savedCities?.count == 1)
+        #expect(CityListService(defaults: defaults).load().count == 1)
     }
 
     // MARK: - remove
@@ -77,13 +78,13 @@ struct CityListViewModelTests {
         #expect(vm.cities[0].id == 2)
     }
 
-    @Test("remove で都市削除時に cityListService.save が呼ばれる")
-    func removePersistsCities() {
-        let service = StubCityListService()
-        let vm = makeFreshViewModel(cityListService: service)
+    @Test("remove で都市削除が永続化される")
+    func removePersistsCities() throws {
+        let defaults = try #require(UserDefaults(suiteName: "test_\(UUID().uuidString)"))
+        let vm = makeFreshViewModel(cityListDefaults: defaults)
         vm.add(.stub(id: 1))
         vm.remove(at: IndexSet(integer: 0))
-        #expect(service.savedCities?.isEmpty == true)
+        #expect(CityListService(defaults: defaults).load().isEmpty)
     }
 
     // MARK: - move
@@ -118,18 +119,18 @@ struct CityListViewModelTests {
     // MARK: - loadCities
 
     @Test("init 直後の cities は空")
-    func initCitiesIsEmpty() {
-        let city = GeocodingResult.stub(id: 42).toCity()
-        let service = StubCityListService(cities: [city])
-        let vm = makeFreshViewModel(cityListService: service)
+    func initCitiesIsEmpty() throws {
+        let defaults = try #require(UserDefaults(suiteName: "test_\(UUID().uuidString)"))
+        CityListService(defaults: defaults).save([GeocodingResult.stub(id: 42).toCity()])
+        let vm = makeFreshViewModel(cityListDefaults: defaults)
         #expect(vm.cities.isEmpty)
     }
 
-    @Test("loadCities で cityListService.load の結果が cities に反映される")
-    func loadCitiesLoadsFromService() {
-        let city = GeocodingResult.stub(id: 42).toCity()
-        let service = StubCityListService(cities: [city])
-        let vm = makeFreshViewModel(cityListService: service)
+    @Test("loadCities で永続化済みの都市リストが反映される")
+    func loadCitiesLoadsPersistedCities() throws {
+        let defaults = try #require(UserDefaults(suiteName: "test_\(UUID().uuidString)"))
+        CityListService(defaults: defaults).save([GeocodingResult.stub(id: 42).toCity()])
+        let vm = makeFreshViewModel(cityListDefaults: defaults)
         vm.loadCities()
         #expect(vm.cities.count == 1)
         #expect(vm.cities[0].id == 42)

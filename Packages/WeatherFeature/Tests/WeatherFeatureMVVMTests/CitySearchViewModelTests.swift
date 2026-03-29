@@ -2,16 +2,18 @@ import CoreModels
 import Dependencies
 import Foundation
 import Testing
+import WeatherDomain
 @testable import WeatherFeatureMVVM
 
 @MainActor
 struct CitySearchViewModelTests {
     private func makeSUT(
-        repository: StubWeatherRepository = StubWeatherRepository()
+        repository: StubWeatherRepository = StubWeatherRepository(),
+        cityListDefaults: UserDefaults = UserDefaults(suiteName: "test_\(UUID().uuidString)")!
     ) -> (vm: CitySearchViewModel, cityListVM: CityListViewModel) {
         withDependencies {
             $0.weatherRepository = repository
-            $0.cityListService = StubCityListService()
+            $0.cityListService = CityListService(defaults: cityListDefaults)
         } operation: {
             let cityListVM = CityListViewModel()
             let vm = CitySearchViewModel(cityListViewModel: cityListVM)

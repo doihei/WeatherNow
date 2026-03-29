@@ -2,16 +2,19 @@ import CoreModels
 import Dependencies
 import Foundation
 import Testing
+import WeatherDomain
 @testable import WeatherFeatureMVVM
 
 @MainActor
 struct AppViewModelTests {
-    private func makeSUT(settingsService: StubAppSettingsService = StubAppSettingsService()) -> AppViewModel {
+    private func makeSUT(
+        appSettingsDefaults: UserDefaults = UserDefaults(suiteName: "test_\(UUID().uuidString)")!
+    ) -> AppViewModel {
         withDependencies {
             $0.weatherRepository = StubWeatherRepository()
             $0.locationService = StubLocationService()
-            $0.appSettingsService = settingsService
-            $0.cityListService = StubCityListService()
+            $0.appSettingsService = AppSettingsService(defaults: appSettingsDefaults)
+            $0.cityListService = CityListService(defaults: UserDefaults(suiteName: "test_\(UUID().uuidString)")!)
         } operation: {
             AppViewModel()
         }
@@ -33,46 +36,40 @@ struct AppViewModelTests {
 
     // MARK: - loadSettings
 
-    @Test("loadSettings で settingsService から設定が読み込まれる")
-    func loadSettingsLoadsFromService() {
+    @Test("loadSettings で永続化済みの設定が読み込まれる")
+    func loadSettingsLoadsPersistedSettings() throws {
         let saved = AppSettings(temperatureUnit: .fahrenheit, windUnit: .mph, theme: .dark)
-        let service = StubAppSettingsService(settings: saved)
-        let vm = makeSUT(settingsService: service)
+        let defaults = try #require(UserDefaults(suiteName: "test_\(UUID().uuidString)"))
+        saved.save(to: defaults)
+        let vm = makeSUT(appSettingsDefaults: defaults)
         vm.loadSettings()
         #expect(vm.settings == saved)
     }
 
     // MARK: - saveSettings
 
-    @Test("saveSettings で settingsService.save が呼ばれ保存される")
-    func saveSettingsPersistsToService() {
-        let service = StubAppSettingsService()
-        let vm = makeSUT(settingsService: service)
+    @Test("saveSettings で設定が永続化される")
+    func saveSettingsPersists() throws {
+        let defaults = try #require(UserDefaults(suiteName: "test_\(UUID().uuidString)"))
+        let vm = makeSUT(appSettingsDefaults: defaults)
         let newSettings = AppSettings(temperatureUnit: .fahrenheit, windUnit: .mph, theme: .dark)
         vm.settings = newSettings
         vm.saveSettings()
-        #expect(service.savedSettings == newSettings)
+        #expect(AppSettings.load(from: defaults) == newSettings)
     }
 
-    @Test("saveSettings を呼ぶ前は savedSettings が nil")
-    func saveNotCalledYieldNilSaved() {
-        let service = StubAppSettingsService()
-        _ = makeSUT(settingsService: service)
-        #expect(service.savedSettings == nil)
+    @Test("saveSettings を呼ぶ前は設定が永続化されていない")
+    func saveNotCalledYieldsDefaultPersistedSettings() throws {
+        let defaults = try #require(UserDefaults(suiteName: "test_\(UUID().uuidString)"))
+        _ = makeSUT(appSettingsDefaults: defaults)
+        #expect(AppSettings.load(from: defaults) == .default)
     }
 
     // MARK: - makeCitySearchViewModel
 
     @Test("makeCitySearchViewModel は CitySearchViewModel を返す")
     func makeCitySearchViewModelReturnsCorrectType() {
-        let vm = withDependencies {
-            $0.weatherRepository = StubWeatherRepository()
-            $0.locationService = StubLocationService()
-            $0.appSettingsService = StubAppSettingsService()
-            $0.cityListService = StubCityListService()
-        } operation: {
-            AppViewModel()
-        }
+        let vm = makeSUT()
         let searchVM = withDependencies {
             $0.weatherRepository = StubWeatherRepository()
         } operation: {

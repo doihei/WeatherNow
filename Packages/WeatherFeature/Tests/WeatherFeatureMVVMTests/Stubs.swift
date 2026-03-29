@@ -29,44 +29,6 @@ struct StubLocationService: LocationServiceProtocol {
     }
 }
 
-// MARK: - StubAppSettingsService
-
-final class StubAppSettingsService: AppSettingsServiceProtocol, @unchecked Sendable {
-    private(set) var savedSettings: AppSettings?
-    var settingsToLoad: AppSettings
-
-    init(settings: AppSettings = .default) {
-        self.settingsToLoad = settings
-    }
-
-    func load() -> AppSettings {
-        settingsToLoad
-    }
-
-    func save(_ settings: AppSettings) {
-        savedSettings = settings
-    }
-}
-
-// MARK: - StubCityListService
-
-final class StubCityListService: CityListServiceProtocol, @unchecked Sendable {
-    private(set) var savedCities: [City]?
-    var citiesToLoad: [City]
-
-    init(cities: [City] = []) {
-        self.citiesToLoad = cities
-    }
-
-    func load() -> [City] {
-        citiesToLoad
-    }
-
-    func save(_ cities: [City]) {
-        savedCities = cities
-    }
-}
-
 // MARK: - Stub Factories
 
 extension Weather {
