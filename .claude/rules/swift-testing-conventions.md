@@ -102,11 +102,16 @@ actor CallCounter {
 @Test("キャッシュヒット時は API が再呼び出しされない")
 func cacheHit() async throws {
     let counter = CallCounter()
-    let client = TestWeatherAPIClient { _, _ in
-        await counter.increment()
-        return Weather.stub()
+    try await withDependencies {
+        $0.weatherAPIClient = TestWeatherAPIClient { _, _ in
+            await counter.increment()
+            return Weather.stub()
+        }
+    } operation: {
+        let repo = WeatherRepository()
+        _ = try await repo.fetchWeather(latitude: 35.68, longitude: 139.69)
+        _ = try await repo.fetchWeather(latitude: 35.68, longitude: 139.69)
     }
-    ...
     let callCount = await counter.count
     #expect(callCount == 1)
 }
@@ -114,19 +119,59 @@ func cacheHit() async throws {
 
 ## テストダブル（DI）
 
-- Protocol を実装する `Test` プレフィックスのクライアントを用意する
-- クロージャでふるまいを注入し、テストケースごとに制御する
+swift-dependencies を使うため、`withDependencies` でスタブを注入する。
+
+### Domain 層（Actor のテスト）
 
 ```swift
-let client = TestWeatherAPIClient { lat, lon in
-    return Weather.stub(temperature: 25.0)
+try await withDependencies {
+    $0.weatherAPIClient = TestWeatherAPIClient { _, _ in Weather.stub(temperature: 25.0) }
+    $0.geocodingAPIClient = TestGeocodingAPIClient { _, _ in [] }
+} operation: {
+    let repo = WeatherRepository()
+    let result = try await repo.fetchWeather(latitude: 35.68, longitude: 139.69)
+    #expect(result.current.temperature == 25.0)
 }
-let repository = WeatherRepository(weatherClient: client, geocodingClient: ...)
+```
+
+`TestWeatherAPIClient` / `TestGeocodingAPIClient` はクロージャでふるまいを注入し、テストケースごとに制御する。
+
+### ViewModel 層（`@MainActor` のテスト）
+
+ViewModel が `@MainActor` の場合、テスト struct にも `@MainActor` を付与する。
+`withDependencies` でスタブを注入し、ViewModel を生成する。
+
+```swift
+@MainActor
+struct CityListViewModelTests {
+    private func makeFreshViewModel(
+        repository: StubWeatherRepository = StubWeatherRepository(),
+        cityListDefaults: UserDefaults = UserDefaults(suiteName: "test_\(UUID().uuidString)")!
+    ) -> CityListViewModel {
+        withDependencies {
+            $0.weatherRepository = repository
+            $0.cityListService = CityListService(defaults: cityListDefaults)
+        } operation: {
+            CityListViewModel()
+        }
+    }
+}
+```
+
+ViewModel 内の非同期 `Task { }` はスタブが即時完了しても非同期で走るため、`Task.sleep` で待機する。
+
+```swift
+vm.loadAllWeather()
+try await Task.sleep(for: .milliseconds(100))
+#expect(vm.citiesWeather[1] != nil)
 ```
 
 ## フィクスチャ
 
-モデルのデフォルト値は `private extension` で `stub` ファクトリを定義する。
+モデルのデフォルト値は `static func stub(...)` ファクトリで定義する。
+
+- **WeatherDomain テスト**：各テストファイル内に `private extension` で定義
+- **WeatherFeature テスト**：`Stubs.swift` に共有 `extension` として定義済み
 
 ```swift
 private extension Weather {
@@ -142,11 +187,13 @@ private extension Weather {
 ## 永続化・副作用の分離
 
 `UserDefaults` を使うテストは `suiteName` に `UUID` を用いて分離する。
+永続化サービスはモックを使わず、UUID 隔離したリアル実装で検証する。
 
 ```swift
-let defaults = try #require(UserDefaults(suiteName: "test_\(UUID().uuidString)"))
-settings.save(to: defaults)
-let loaded = AppSettings.load(from: defaults)
+let defaults = UserDefaults(suiteName: "test_\(UUID().uuidString)")!
+let service = CityListService(defaults: defaults)
+service.save([city])
+#expect(CityListService(defaults: defaults).load().count == 1)
 ```
 
 ## Package.swift 設定
@@ -164,10 +211,13 @@ let loaded = AppSettings.load(from: defaults)
 ## テスト実行
 
 ```bash
-make test             # 全パッケージ
-make test-models      # CoreModels のみ
-make test-network     # CoreNetwork のみ
-make test-domain      # WeatherDomain のみ
+make test                # 全パッケージ
+make test-models         # CoreModels のみ
+make test-network        # CoreNetwork のみ
+make test-domain         # WeatherDomain のみ
+make test-feature-mvvm   # WeatherFeature MVVM のみ
+make test-feature-tca    # WeatherFeature TCA のみ
+make test-feature        # MVVM・TCA 両方
 ```
 
 Xcode から実行する場合は `WeatherNow.xcworkspace` を開き、各パッケージのテストターゲットを選択して ⌘U で実行する。SPM パッケージのテストを WeatherNow アプリの TestPlan に含めることはできない。

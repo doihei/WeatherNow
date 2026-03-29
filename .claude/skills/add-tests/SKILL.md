@@ -27,16 +27,8 @@ argument-hint: "[モジュール名 or 型名]"
    - **パラメータ化**：複数パターンをまとめられるケースは `zip` でまとめる
 
 4. **テストファイルの作成・更新**
-   `.claude/rules/swift-testing-conventions.md` に従って実装する。
-   - 1型1ファイル（`TypeNameTests.swift`）
-   - 単一関心の型は `struct TypeNameTests`、複数の関心事は `enum` + nested `struct`
-   - `@Suite` デコレータは付けない
-   - `@Test("日本語で意図を記述する")` で命名する
-   - テストダブルは後述のパターンを使う
-   - フィクスチャは `private extension Model { static func stub(...) }` で定義する
-   - 非同期カウンタは `actor CallCounter` を使う
-   - `UserDefaults` を使うテストは `suiteName: "test_\(UUID().uuidString)"` で分離する
-   - テストファイルの配置先はモジュールごとに異なる（後述）
+   `.claude/rules/swift-testing-conventions.md` に従って実装する（命名・構成・アサーション・DI パターンはすべてそちらを参照）。
+   テストファイルの配置先は下記テーブルを参照。
 
 5. **テスト実行**
    対応する `make test-*` コマンドを実行し、すべてパスすることを確認する。
@@ -65,23 +57,24 @@ argument-hint: "[モジュール名 or 型名]"
 
 ### CoreNetwork 層（WeatherDomain のテスト用）
 
-```swift
-// CoreNetwork/Clients/ に定義済み。クロージャで注入する。
-let client = TestWeatherAPIClient { lat, lon in
-    return Weather.stub()
-}
+`CoreNetwork/Clients/` に `TestWeatherAPIClient` / `TestGeocodingAPIClient` を定義済み。
+クロージャでふるまいを注入する。
 
-let client = TestGeocodingAPIClient { name, count in
-    return [GeocodingResult(...)]
+```swift
+try await withDependencies {
+    $0.weatherAPIClient = TestWeatherAPIClient { _, _ in Weather.stub() }
+    $0.geocodingAPIClient = TestGeocodingAPIClient { _, _ in [] }
+} operation: {
+    let repo = WeatherRepository()
+    // ...
 }
-// 引数なし（常に空配列）の場合はデフォルト初期化子を使う
+// 引数なし（常にデフォルト値）の場合はデフォルト初期化子を使う
 let client = TestGeocodingAPIClient()
 ```
 
-### WeatherFeature 層（ViewModel のテスト用）
+### WeatherFeature (MVVM) 層（ViewModel のテスト用）
 
-`Tests/WeatherFeatureMVVMTests/Stubs.swift` に共有スタブを定義済み。
-新しいテストファイルは定義済みの型をそのまま使う。
+`Tests/WeatherFeatureMVVMTests/Stubs.swift` に以下のスタブを定義済み。
 
 ```swift
 // StubWeatherRepository — weatherStub / searchStub をプロパティで差し替え可能
@@ -91,115 +84,31 @@ repo.weatherStub = Weather.stub(temperature: 30.0)
 // StubLocationService — location プロパティで差し替え可能
 var loc = StubLocationService()
 loc.location = (latitude: 34.69, longitude: 135.50)
+```
 
-// StubAppSettingsService — final class。savedSettings で保存内容を検証できる
-let service = StubAppSettingsService(settings: AppSettings(temperatureUnit: .fahrenheit, ...))
-vm.saveSettings()
-#expect(service.savedSettings == expected)
+永続化サービス（`AppSettingsService` / `CityListService`）はモックを使わず、
+UUID 隔離したリアル実装を `withDependencies` で注入して検証する。
 
-// StubCityListService — final class。savedCities で保存内容を検証できる
-let cityService = StubCityListService(cities: [])
+```swift
+let cityListDefaults = UserDefaults(suiteName: "test_\(UUID().uuidString)")!
 let vm = withDependencies {
-    $0.weatherRepository = repo
-    $0.cityListService = cityService
+    $0.weatherRepository = StubWeatherRepository()
+    $0.cityListService = CityListService(defaults: cityListDefaults)
 } operation: { CityListViewModel() }
+
 vm.add(.stub(id: 1))
-#expect(cityService.savedCities?.count == 1)
+// 永続化の検証はサービスに直接問い合わせる
+#expect(CityListService(defaults: cityListDefaults).load().count == 1)
 ```
 
 スタブに存在しない Protocol を新たにテストするときは `Stubs.swift` に追記する。
-
-### actor CallCounter（非同期呼び出し回数の計測）
-
-```swift
-actor CallCounter {
-    var count = 0
-    func increment() { count += 1 }
-}
-let counter = CallCounter()
-// クロージャ内: await counter.increment()
-// 確認: #expect(await counter.count == 1)
-```
-
----
-
-## @MainActor ViewModel のテストパターン
-
-ViewModel が `@MainActor` の場合、テスト struct にも `@MainActor` を付与する。
-
-```swift
-@MainActor
-struct CityListViewModelTests {
-    private func makeFreshViewModel(
-        repository: StubWeatherRepository = StubWeatherRepository(),
-        cityListService: StubCityListService = StubCityListService()
-    ) -> CityListViewModel {
-        withDependencies {
-            $0.weatherRepository = repository
-            $0.cityListService = cityListService
-        } operation: {
-            CityListViewModel()
-        }
-    }
-
-    @Test("add で都市が1件追加される")
-    func addCity() {
-        let vm = makeFreshViewModel()
-        vm.loadCities()
-        vm.add(.stub(id: 1))
-        #expect(vm.cities.count == 1)
-    }
-}
-```
-
-**非同期 Task を待つ場合** — ViewModel 内の `Task { }` は即時完了するスタブを使っても
-非同期で走るため、`Task.sleep` で待機する。
-
-```swift
-vm.loadAllWeather()
-try await Task.sleep(for: .milliseconds(100))
-#expect(vm.citiesWeather[1] != nil)
-```
-
----
-
-## フィクスチャの定義場所
-
-- **WeatherDomain テスト**：各テストファイル内に `private extension` で定義
-- **WeatherFeature テスト**：`Stubs.swift` に `extension` として定義済み
-
-```swift
-// Stubs.swift に定義済みのスタブファクトリ
-Weather.stub(temperature: 25.0, daily: [])
-GeocodingResult.stub(id: 1, name: "東京")
-DailyForecast.stub(date: someDate)
-```
-
----
-
-## エラーテストのパターン
-
-```swift
-do {
-    _ = try await someMethod()
-    Issue.record("エラーがスローされるべき")
-} catch let error as WeatherError {
-    #expect(error == .expectedCase)
-} catch {
-    Issue.record("WeatherError 以外がスロー: \(error)")
-}
-```
 
 ---
 
 ## 注意事項
 
-- XCTest は使わない。`import Testing` のみ使用する
-- `@Suite` デコレータは Xcode が除去するため付けない
-- `@MainActor` ViewModel のテスト struct には `@MainActor` を付与する
 - Actor のメソッドは Protocol で `async` にしないと Swift 6 でコンパイルエラーになる
   （`clearCache()` → `clearCache() async` など）
 - macOS 14 未満で使えない API は `if #available(macOS 15, iOS 18, *)` でガードする
-- `swift test` が通るよう `Package.swift` の `platforms` に `.macOS(.v14)` を含める
-- テストターゲットの `dependencies` に必要なモジュールをすべて明示する
 - Foundation（`UserDefaults`・`IndexSet`・`Date` など）は各テストファイルで明示的に `import Foundation` する
+- `WeatherDomain` を使うテストファイルは `import WeatherDomain` を明示する
