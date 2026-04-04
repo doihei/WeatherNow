@@ -25,7 +25,7 @@ WeatherFeatureTCA  ─┤→ WeatherDomain → CoreNetwork → CoreModels
 | CoreUI | 共通 UI コンポーネント・モデルへの UI extension | WeatherCode+SFSymbol |
 | WeatherDomain | Repository・LocationService・AppSettingsService・CityListService | WeatherRepository, LocationService, AppSettingsService, CityListService |
 | WeatherFeatureMVVM | MVVM 実装の View・ViewModel | AppViewModel, CityListViewModel, CitySearchViewModel, CurrentWeatherViewModel, WeeklyForecastViewModel |
-| WeatherFeatureTCA | TCA 実装の View・Feature（未実装） | — |
+| WeatherFeatureTCA | TCA 実装の View・Feature | RootFeature, CurrentWeatherFeature, WeeklyForecastFeature, CityListFeature, CityRowFeature, CitySearchFeature |
 
 ---
 
@@ -76,7 +76,7 @@ Protocol・実装・DependencyKey を同一ディレクトリに配置する（C
 | 非同期処理 | `Task` + TaskKey | `.run { }` + `.cancellable(id:)` |
 | ナビゲーション | `AppViewModel` が `NavigationPath` を保持 | `RootFeature` が `StackState` を管理 |
 | DI | `@Dependency` で注入（`testValue` 必須） | `@Dependency` で注入（`testValue` 必須） |
-| debounce | `Task.sleep` + `checkCancellation()` | `.debounce(id:, for:, scheduler:)` |
+| debounce | `Task.sleep` + `checkCancellation()` | `clock.sleep(.milliseconds(300))` + `.cancellable(id:, cancelInFlight: true)` |
 | 都市リスト | `[City]` を直接管理 | `IdentifiedArrayOf` + `.forEach` |
 
 ---
@@ -105,4 +105,29 @@ SF Symbols は `SFSafeSymbols` ライブラリを使って型安全に扱う。
 extension WeatherCode {
     var symbol: SFSymbol { ... }
 }
+```
+
+---
+
+## 9. WeatherFeatureTCA ファイル構成
+
+```
+Sources/TCA/
+├── Root/           — RootFeature（StackState による WeatherPath・CityPath 管理）
+├── CurrentWeather/ — CurrentWeatherFeature（ViewState: idle/loading/loaded/error）
+├── WeeklyForecast/ — WeeklyForecastFeature
+├── CityList/       — CityListFeature（.forEach + IdentifiedArrayOf）
+│                     CityRowFeature（各行の天気フェッチ）
+└── CitySearch/     — CitySearchFeature（debounce）, CitySearchDelegate（トップレベル enum）
+```
+
+`@Reducer enum WeatherPath / CityPath` で NavigationStack のルートを型安全に定義。
+子→親通知は Delegate Actions パターン（`CitySearchDelegate`）で実装。
+`@Reducer enum` の `State` / `Action` は macro が `Sendable` / `Equatable` を付与しないため、
+extension で明示的に適合する。
+
+```swift
+@Reducer public enum WeatherPath { case weeklyForecast(WeeklyForecastFeature) }
+extension WeatherPath.State: Equatable, Sendable {}
+extension WeatherPath.Action: Sendable, Equatable {}
 ```

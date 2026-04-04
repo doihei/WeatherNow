@@ -30,4 +30,5 @@ make test-feature-tca   # TCA のみ
 
 - **Phase 1–2 完了**：CoreModels・CoreNetwork・CoreUI・WeatherDomain
 - **Phase 3 完了**：WeatherFeature MVVM ViewModels
-- **Phase 4 以降**：WeatherFeature TCA・UI 実装は未着手
+- **Phase 4 完了**：WeatherFeature TCA Features（36テスト）
+- **Phase 5 以降**：UI 実装は未着手

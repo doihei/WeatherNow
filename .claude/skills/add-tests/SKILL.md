@@ -90,7 +90,7 @@ loc.location = (latitude: 34.69, longitude: 135.50)
 UUID 隔離したリアル実装を `withDependencies` で注入して検証する。
 
 ```swift
-let cityListDefaults = UserDefaults(suiteName: "test_\(UUID().uuidString)")!
+let cityListDefaults = try #require(UserDefaults(suiteName: "test_\(UUID().uuidString)"))
 let vm = withDependencies {
     $0.weatherRepository = StubWeatherRepository()
     $0.cityListService = CityListService(defaults: cityListDefaults)
@@ -102,6 +102,53 @@ vm.add(.stub(id: 1))
 ```
 
 スタブに存在しない Protocol を新たにテストするときは `Stubs.swift` に追記する。
+
+### WeatherFeature (TCA) 層（Feature のテスト）
+
+`Tests/WeatherFeatureTCATests/Stubs.swift` に以下のスタブを定義済み。
+
+```swift
+// StubWeatherRepository — weatherStub / searchStub をプロパティで差し替え可能
+var repo = StubWeatherRepository()
+repo.weatherStub = Weather.stub(temperature: 30.0)
+
+// StubLocationService — location プロパティで差し替え可能
+```
+
+TestStore は `@MainActor` が必要。テストグループ struct にも `@MainActor` を付与する。
+
+```swift
+@MainActor
+struct LoadTests {
+    @Test("...")
+    func someTest() async {
+        let store = TestStore(initialState: SomeFeature.State()) {
+            SomeFeature()
+        } withDependencies: {
+            $0.weatherRepository = StubWeatherRepository()
+        }
+        // 複数ステップのテストは exhaustivity = .off で中間状態を省略
+        store.exhaustivity = .off
+        await store.send(.someAction)
+        await store.receive(\.response.success) { $0.result = ... }
+    }
+}
+```
+
+debounce のテストは `TestClock` を使い時間を手動制御する。
+
+```swift
+let clock = TestClock()
+let store = TestStore(...) withDependencies: {
+    $0.continuousClock = clock
+}
+await store.send(.queryChanged("東京")) { $0.isSearching = true }
+await clock.advance(by: .milliseconds(300))
+await store.receive(.searchResponse(.success(...)))
+```
+
+インライン `struct` は SwiftLint の nesting 違反になる（型のネストは最大1段）。
+テスト用のスタブ struct はファイルのトップレベルに `private struct` として定義する。
 
 ---
 

@@ -190,7 +190,7 @@ private extension Weather {
 永続化サービスはモックを使わず、UUID 隔離したリアル実装で検証する。
 
 ```swift
-let defaults = UserDefaults(suiteName: "test_\(UUID().uuidString)")!
+let defaults = try #require(UserDefaults(suiteName: "test_\(UUID().uuidString)"))
 let service = CityListService(defaults: defaults)
 service.save([city])
 #expect(CityListService(defaults: defaults).load().count == 1)

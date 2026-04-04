@@ -278,11 +278,11 @@ Open-Meteo の Geocoding API で都市を検索して登録する。
 - [x] `AppViewModel`（NavigationPath・Tab 管理）
 
 ### Phase 4：TCA 実装
-- [ ] `CurrentWeatherFeature`
-- [ ] `WeeklyForecastFeature`
-- [ ] `CitySearchFeature`（`.debounce` 使用）
-- [ ] `CityListFeature`（`.forEach` + `IdentifiedArrayOf`）
-- [ ] `RootFeature`（`StackState`・TabView 管理）
+- [x] `CurrentWeatherFeature`
+- [x] `WeeklyForecastFeature`
+- [x] `CitySearchFeature`（`clock.sleep` + `cancelInFlight: true` で debounce）
+- [x] `CityListFeature`（`.forEach` + `IdentifiedArrayOf`）
+- [x] `RootFeature`（`StackState`・TabView 管理）
 
 ### Phase 5：UI 実装
 - [ ] `HourlyChartView`（Swift Charts）
