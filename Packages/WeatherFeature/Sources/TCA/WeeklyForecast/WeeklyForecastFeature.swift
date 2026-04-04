@@ -5,7 +5,6 @@ import CoreModels
 
 @Reducer
 public struct WeeklyForecastFeature: Sendable {
-
     // MARK: - State
 
     @ObservableState
@@ -30,7 +29,7 @@ public struct WeeklyForecastFeature: Sendable {
         Reduce { _, action in
             switch action {
             case .onAppear:
-                return .none
+                .none
             }
         }
     }

@@ -26,7 +26,6 @@ extension CityPath.Action: Sendable, Equatable {}
 
 @Reducer
 public struct RootFeature: Sendable {
-
     // MARK: - Tab
 
     public enum Tab: Sendable, Equatable {

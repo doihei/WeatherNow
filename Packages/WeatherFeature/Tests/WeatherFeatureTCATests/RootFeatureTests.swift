@@ -48,8 +48,8 @@ enum RootFeatureTests {
     @MainActor
     struct SettingsTests {
         @Test("onAppear で永続化済み設定が読み込まれる")
-        func onAppearLoadsSettings() async {
-            let defaults = UserDefaults(suiteName: "test_\(UUID().uuidString)")!
+        func onAppearLoadsSettings() async throws {
+            let defaults = try #require(UserDefaults(suiteName: "test_\(UUID().uuidString)"))
             var settings = AppSettings.default
             settings.temperatureUnit = .fahrenheit
             AppSettingsService(defaults: defaults).save(settings)
@@ -61,8 +61,8 @@ enum RootFeatureTests {
         }
 
         @Test("settingsChanged で settings が更新・永続化される")
-        func settingsChangedUpdatesAndPersists() async {
-            let defaults = UserDefaults(suiteName: "test_\(UUID().uuidString)")!
+        func settingsChangedUpdatesAndPersists() async throws {
+            let defaults = try #require(UserDefaults(suiteName: "test_\(UUID().uuidString)"))
             let store = makeStore(defaults: defaults)
             var newSettings = AppSettings.default
             newSettings.temperatureUnit = .fahrenheit
@@ -79,7 +79,7 @@ enum RootFeatureTests {
     @MainActor
     struct DelegateRoutingTests {
         @Test("CitySearch の cityAdded delegate が CityList.addCity に転送される")
-        func cityAddedDelegateRouted() async {
+        func cityAddedDelegateRouted() async throws {
             var initial = RootFeature.State()
             initial.cityPath.append(.citySearch(CitySearchFeature.State()))
 
@@ -87,8 +87,8 @@ enum RootFeatureTests {
             store.exhaustivity = .off
 
             let result = GeocodingResult.stub(id: 42)
-            await store.send(.cityPath(.element(
-                id: initial.cityPath.ids.first!,
+            try await store.send(.cityPath(.element(
+                id: #require(initial.cityPath.ids.first),
                 action: .citySearch(.delegate(.cityAdded(result)))
             )))
             await store.receive(.cityList(.addCity(result))) {

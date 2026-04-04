@@ -7,7 +7,6 @@ import WeatherDomain
 
 @Reducer
 public struct CurrentWeatherFeature: Sendable {
-
     // MARK: - ViewState
 
     public enum ViewState: Sendable, Equatable {
@@ -93,9 +92,8 @@ public struct CurrentWeatherFeature: Sendable {
                 // 逆ジオコーディング（失敗しても天気取得は継続）
                 let geocoder = CLGeocoder()
                 let clLocation = CLLocation(latitude: location.latitude, longitude: location.longitude)
-                if let placemarks = try? await geocoder.reverseGeocodeLocation(clLocation),
-                   let placemark = placemarks.first
-                {
+                let placemarks = try? await geocoder.reverseGeocodeLocation(clLocation)
+                if let placemark = placemarks?.first {
                     let name = placemark.locality ?? placemark.administrativeArea ?? ""
                     if !name.isEmpty { await send(.cityNameResolved(name)) }
                 }

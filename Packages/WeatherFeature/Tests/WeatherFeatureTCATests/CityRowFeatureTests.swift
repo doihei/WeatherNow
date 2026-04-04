@@ -37,23 +37,27 @@ enum CityRowFeatureTests {
 
         @Test("fetchWeather 失敗時は State が変化しない")
         func fetchWeatherFailureLeavesStateUnchanged() async {
-            struct FailingRepo: WeatherRepositoryProtocol {
-                func fetchWeather(latitude _: Double, longitude _: Double) async throws -> Weather {
-                    throw WeatherError.networkFailure("error")
-                }
-
-                func searchCities(name _: String) async throws -> [GeocodingResult] { [] }
-                func clearCache() async {}
-            }
             let city = GeocodingResult.stub(id: 1).toCity()
             let store = TestStore(initialState: CityRowFeature.State(city: city)) {
                 CityRowFeature()
             } withDependencies: {
-                $0.weatherRepository = FailingRepo()
+                $0.weatherRepository = CityRowFailingRepo()
             }
             await store.send(.onAppear)
             await store.receive(.weatherResponse(.failure(.networkFailure("error"))))
             // weather は nil のまま（State は変化しない）
         }
     }
+}
+
+private struct CityRowFailingRepo: WeatherRepositoryProtocol {
+    func fetchWeather(latitude _: Double, longitude _: Double) async throws -> Weather {
+        throw WeatherError.networkFailure("error")
+    }
+
+    func searchCities(name _: String) async throws -> [GeocodingResult] {
+        []
+    }
+
+    func clearCache() async {}
 }

@@ -23,8 +23,8 @@ enum CityListFeatureTests {
     @MainActor
     struct OnAppearTests {
         @Test("onAppear で永続化済み都市が rows に反映される")
-        func onAppearLoadsCities() async {
-            let defaults = UserDefaults(suiteName: "test_\(UUID().uuidString)")!
+        func onAppearLoadsCities() async throws {
+            let defaults = try #require(UserDefaults(suiteName: "test_\(UUID().uuidString)"))
             let city1 = GeocodingResult.stub(id: 1, name: "東京").toCity()
             let city2 = GeocodingResult.stub(id: 2, name: "大阪").toCity()
             CityListService(defaults: defaults).save([city1, city2])
@@ -57,8 +57,8 @@ enum CityListFeatureTests {
         }
 
         @Test("addCity で都市が永続化される")
-        func addCityPersists() async {
-            let defaults = UserDefaults(suiteName: "test_\(UUID().uuidString)")!
+        func addCityPersists() async throws {
+            let defaults = try #require(UserDefaults(suiteName: "test_\(UUID().uuidString)"))
             let result = GeocodingResult.stub(id: 1)
             let store = makeStore(defaults: defaults)
             await store.send(.addCity(result)) {

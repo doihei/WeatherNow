@@ -7,7 +7,6 @@ import WeatherDomain
 
 @Reducer
 public struct CityListFeature: Sendable {
-
     // MARK: - State
 
     @ObservableState

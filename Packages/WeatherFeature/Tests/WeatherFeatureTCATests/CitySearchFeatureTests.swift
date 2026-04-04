@@ -101,20 +101,10 @@ enum CitySearchFeatureTests {
         @Test("検索エラーで isSearching が false になり errorMessage が設定される")
         func searchErrorSetsErrorMessage() async {
             let clock = TestClock()
-            struct FailingRepo: WeatherRepositoryProtocol {
-                func fetchWeather(latitude _: Double, longitude _: Double) async throws -> Weather { .stub() }
-
-                func searchCities(name _: String) async throws -> [GeocodingResult] {
-                    throw WeatherError.networkFailure("検索失敗")
-                }
-
-                func clearCache() async {}
-            }
-
             let store = TestStore(initialState: CitySearchFeature.State()) {
                 CitySearchFeature()
             } withDependencies: {
-                $0.weatherRepository = FailingRepo()
+                $0.weatherRepository = CitySearchFailingRepo()
                 $0.continuousClock = clock
             }
 
@@ -164,4 +154,16 @@ enum CitySearchFeatureTests {
             await store.receive(.delegate(.cityAdded(result)))
         }
     }
+}
+
+private struct CitySearchFailingRepo: WeatherRepositoryProtocol {
+    func fetchWeather(latitude _: Double, longitude _: Double) async throws -> Weather {
+        .stub()
+    }
+
+    func searchCities(name _: String) async throws -> [GeocodingResult] {
+        throw WeatherError.networkFailure("検索失敗")
+    }
+
+    func clearCache() async {}
 }

@@ -6,7 +6,6 @@ import WeatherDomain
 
 @Reducer
 public struct CityRowFeature: Sendable {
-
     // MARK: - State
 
     @ObservableState
@@ -14,7 +13,9 @@ public struct CityRowFeature: Sendable {
         public let city: City
         public var weather: Weather?
 
-        public var id: Int { city.id }
+        public var id: Int {
+            city.id
+        }
 
         public init(city: City, weather: Weather? = nil) {
             self.city = city

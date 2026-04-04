@@ -41,11 +41,6 @@ enum CurrentWeatherFeatureTests {
 
         @Test("onAppear が locationDenied エラーで viewState が error になる")
         func onAppearLocationDeniedSetsError() async {
-            struct DeniedLocationService: LocationServiceProtocol {
-                func requestCurrentLocation() async throws -> (latitude: Double, longitude: Double) {
-                    throw WeatherError.locationDenied
-                }
-            }
             let store = TestStore(initialState: CurrentWeatherFeature.State()) {
                 CurrentWeatherFeature()
             } withDependencies: {
@@ -61,19 +56,11 @@ enum CurrentWeatherFeatureTests {
 
         @Test("onAppear がネットワークエラーで viewState が error になる")
         func onAppearNetworkErrorSetsError() async {
-            struct FailingRepo: WeatherRepositoryProtocol {
-                func fetchWeather(latitude _: Double, longitude _: Double) async throws -> Weather {
-                    throw WeatherError.networkFailure("timeout")
-                }
-
-                func searchCities(name _: String) async throws -> [GeocodingResult] { [] }
-                func clearCache() async {}
-            }
             let store = TestStore(initialState: CurrentWeatherFeature.State()) {
                 CurrentWeatherFeature()
             } withDependencies: {
                 $0.locationService = StubLocationService()
-                $0.weatherRepository = FailingRepo()
+                $0.weatherRepository = CurrentWeatherFailingRepo()
             }
             store.exhaustivity = .off
             await store.send(.onAppear)
@@ -159,4 +146,22 @@ enum CurrentWeatherFeatureTests {
             }
         }
     }
+}
+
+private struct DeniedLocationService: LocationServiceProtocol {
+    func requestCurrentLocation() async throws -> (latitude: Double, longitude: Double) {
+        throw WeatherError.locationDenied
+    }
+}
+
+private struct CurrentWeatherFailingRepo: WeatherRepositoryProtocol {
+    func fetchWeather(latitude _: Double, longitude _: Double) async throws -> Weather {
+        throw WeatherError.networkFailure("timeout")
+    }
+
+    func searchCities(name _: String) async throws -> [GeocodingResult] {
+        []
+    }
+
+    func clearCache() async {}
 }

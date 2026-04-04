@@ -4,9 +4,13 @@ import WeatherDomain
 
 // MARK: - CitySearchFeature
 
+public enum CitySearchDelegate: Sendable, Equatable {
+    /// 都市の追加を RootFeature に通知する
+    case cityAdded(GeocodingResult)
+}
+
 @Reducer
 public struct CitySearchFeature: Sendable {
-
     // MARK: - State
 
     @ObservableState
@@ -27,12 +31,7 @@ public struct CitySearchFeature: Sendable {
         case queryChanged(String)
         case searchResponse(Result<[GeocodingResult], WeatherError>)
         case addCityTapped(GeocodingResult)
-        case delegate(Delegate)
-
-        public enum Delegate: Sendable, Equatable {
-            /// 都市の追加を RootFeature に通知する
-            case cityAdded(GeocodingResult)
-        }
+        case delegate(CitySearchDelegate)
     }
 
     // MARK: - CancelID
