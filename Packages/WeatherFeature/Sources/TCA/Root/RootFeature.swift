@@ -8,6 +8,7 @@ import WeatherDomain
 @Reducer
 public enum WeatherPath {
     case weeklyForecast(WeeklyForecastFeature)
+    case hourlyChart(HourlyChartFeature)
 }
 
 extension WeatherPath.State: Equatable, Sendable {}
@@ -88,6 +89,24 @@ public struct RootFeature: Sendable {
             case let .settingsChanged(settings):
                 state.settings = settings
                 appSettingsService.save(settings)
+                return .none
+
+            // 週間予報へのナビゲーション
+            case let .currentWeather(.showWeeklyForecast(weather)):
+                state.weatherPath.append(WeatherPath.State.weeklyForecast(.init(weather: weather)))
+                return .none
+
+            // 24時間グラフへのナビゲーション
+            case let .currentWeather(.showHourlyChart(weather)):
+                state.weatherPath.append(WeatherPath.State.hourlyChart(.init(weather: weather)))
+                return .none
+
+            // 都市検索へのナビゲーション
+            case .cityList(.showCitySearch):
+                let addedIDs = Set(state.cityList.rows.map(\.city.id))
+                var searchState = CitySearchFeature.State()
+                searchState.addedCityIDs = addedIDs
+                state.cityPath.append(CityPath.State.citySearch(searchState))
                 return .none
 
             // CitySearchFeature の delegate を CityListFeature に転送（疎結合）

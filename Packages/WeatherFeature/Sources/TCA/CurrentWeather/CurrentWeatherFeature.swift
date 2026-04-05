@@ -35,6 +35,10 @@ public struct CurrentWeatherFeature: Sendable {
         case refresh
         case cityNameResolved(String)
         case weatherResponse(Result<Weather, WeatherError>)
+        /// 週間予報へのナビゲーション（RootFeature が処理する）
+        case showWeeklyForecast(Weather)
+        /// 24時間グラフへのナビゲーション（RootFeature が処理する）
+        case showHourlyChart(Weather)
     }
 
     // MARK: - CancelID
@@ -77,6 +81,10 @@ public struct CurrentWeatherFeature: Sendable {
 
             case let .weatherResponse(.failure(error)):
                 state.viewState = .error(error)
+                return .none
+
+            case .showWeeklyForecast, .showHourlyChart:
+                // RootFeature が WeatherPath への push を処理する
                 return .none
             }
         }

@@ -27,6 +27,8 @@ public struct CityListFeature: Sendable {
         case moveCity(IndexSet, Int)
         /// .forEach で CityRowFeature の Action を転送する
         case rows(IdentifiedActionOf<CityRowFeature>)
+        /// 都市検索画面へのナビゲーション（RootFeature が処理する）
+        case showCitySearch
     }
 
     // MARK: - Dependencies
@@ -67,6 +69,10 @@ public struct CityListFeature: Sendable {
 
             case .rows:
                 // .forEach が各 CityRowFeature に Action を転送する
+                return .none
+
+            case .showCitySearch:
+                // RootFeature が CityPath への push を処理する
                 return .none
             }
         }
