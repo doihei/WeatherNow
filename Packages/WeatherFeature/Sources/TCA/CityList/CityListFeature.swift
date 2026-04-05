@@ -21,6 +21,7 @@ public struct CityListFeature: Sendable {
 
     public enum Action: Sendable, Equatable {
         case onAppear
+        case refresh
         /// CitySearchFeature の delegate 経由で呼ばれる（上限10件・重複チェックあり）
         case addCity(GeocodingResult)
         case removeCity(IndexSet)
@@ -42,10 +43,23 @@ public struct CityListFeature: Sendable {
             switch action {
             case .onAppear:
                 let cities = cityListService.load()
+                let existing = state.rows
+                state.rows = IdentifiedArray(
+                    uniqueElements: cities.map { city in
+                        existing[id: city.id] ?? CityRowFeature.State(city: city)
+                    }
+                )
+                return .none
+
+            case .refresh:
+                let cities = cityListService.load()
                 state.rows = IdentifiedArray(
                     uniqueElements: cities.map { CityRowFeature.State(city: $0) }
                 )
-                return .none
+                let ids = state.rows.map(\.id)
+                return .merge(ids.map { id in
+                    .send(.rows(.element(id: id, action: .onAppear)))
+                })
 
             case let .addCity(result):
                 guard state.rows.count < 10 else {

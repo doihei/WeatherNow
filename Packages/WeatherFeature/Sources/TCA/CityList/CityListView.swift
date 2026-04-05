@@ -38,7 +38,7 @@ public struct CityListView: View {
             #endif
         }
         .refreshable {
-            store.send(.onAppear)
+            store.send(.refresh)
         }
         .overlay {
             if let error = store.errorMessage {
