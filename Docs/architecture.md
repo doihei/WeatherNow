@@ -22,10 +22,10 @@ WeatherFeatureTCA  ─┤→ WeatherDomain → CoreNetwork → CoreModels
 |---|---|---|
 | CoreModels | データモデル・エラー型・設定値 | Weather, City, AppSettings, WeatherCode, WeatherError |
 | CoreNetwork | HTTP 通信・レスポンス変換 | APIClient, WeatherAPIClient, GeocodingAPIClient, OpenMeteoEndpoint |
-| CoreUI | 共通 UI コンポーネント・モデルへの UI extension | WeatherCode+SFSymbol |
+| CoreUI | 共通 UI コンポーネント・モデルへの UI extension・Design Tokens・ローカライズ | WeatherIconView, TemperatureText, Spacing, Size, AppSymbol, L10n |
 | WeatherDomain | Repository・LocationService・AppSettingsService・CityListService | WeatherRepository, LocationService, AppSettingsService, CityListService |
-| WeatherFeatureMVVM | MVVM 実装の View・ViewModel | AppViewModel, CityListViewModel, CitySearchViewModel, CurrentWeatherViewModel, WeeklyForecastViewModel |
-| WeatherFeatureTCA | TCA 実装の View・Feature | RootFeature, CurrentWeatherFeature, WeeklyForecastFeature, CityListFeature, CityRowFeature, CitySearchFeature |
+| WeatherFeatureMVVM | MVVM 実装の View・ViewModel | AppViewModel, CityListViewModel, CitySearchViewModel, CurrentWeatherViewModel, WeeklyForecastViewModel + 各画面 View |
+| WeatherFeatureTCA | TCA 実装の View・Feature | RootFeature, CurrentWeatherFeature, WeeklyForecastFeature, CityListFeature, CityRowFeature, CitySearchFeature + 各画面 View |
 
 ---
 
@@ -97,15 +97,22 @@ Protocol・実装・DependencyKey を同一ディレクトリに配置する（C
 
 ## 8. SF Symbols 利用方針
 
-SF Symbols は `SFSafeSymbols` ライブラリを使って型安全に扱う。
-マッピング定義は `CoreUI` の `WeatherCode+SFSymbol.swift` に集約し、`CoreModels` には置かない。
+SF Symbols は `SFSafeSymbols` ライブラリを使って型安全に扱う。定義は CoreUI に集約し、`CoreModels` には置かない。
 
 ```swift
-// CoreUI/Extensions/WeatherCode+SFSymbol.swift
+// CoreUI/Extensions/WeatherCode+SFSymbol.swift — WMO コード → SFSymbol マッピング
 extension WeatherCode {
     var symbol: SFSymbol { ... }
 }
+
+// CoreUI/Tokens/AppSymbol.swift — タブ・アイコン・アクションボタン用シンボル定数
+public enum AppSymbol {
+    public static let weatherTab: SFSymbol = .cloudSunFill
+    // ...
+}
 ```
+
+WeatherFeature 側では `AppSymbol.xxx.rawValue` を `systemImage:` に渡す（SFSafeSymbols は CoreUI のみに依存）。
 
 ---
 
@@ -113,12 +120,14 @@ extension WeatherCode {
 
 ```
 Sources/TCA/
-├── Root/           — RootFeature（StackState による WeatherPath・CityPath 管理）
-├── CurrentWeather/ — CurrentWeatherFeature（ViewState: idle/loading/loaded/error）
-├── WeeklyForecast/ — WeeklyForecastFeature
-├── CityList/       — CityListFeature（.forEach + IdentifiedArrayOf）
-│                     CityRowFeature（各行の天気フェッチ）
-└── CitySearch/     — CitySearchFeature（debounce）, CitySearchDelegate（トップレベル enum）
+├── Root/           — RootFeature（StackState による WeatherPath・CityPath 管理）, RootView
+├── CurrentWeather/ — CurrentWeatherFeature（ViewState: idle/loading/loaded/error）, CurrentWeatherView
+├── WeeklyForecast/ — WeeklyForecastFeature, WeeklyForecastView
+├── HourlyChart/    — HourlyChartFeature, HourlyChartView（Swift Charts）
+├── CityList/       — CityListFeature（.forEach + IdentifiedArrayOf）, CityListView
+│                     CityRowFeature（各行の天気フェッチ）, CityRowView
+├── CitySearch/     — CitySearchFeature（debounce）, CitySearchDelegate, CitySearchView
+└── Settings/       — SettingsView
 ```
 
 `@Reducer enum WeatherPath / CityPath` で NavigationStack のルートを型安全に定義。

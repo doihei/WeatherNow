@@ -46,26 +46,39 @@ Protocol と実装は同じディレクトリに配置する（CoreNetwork の `
 
 | ディレクトリ | 対象 |
 |---|---|
-| `Extensions/` | 他モジュール型への extension |
+| `Components/` | WeatherIconView, TemperatureText（共通 UI コンポーネント） |
+| `Extensions/` | 他モジュール型への extension（WeatherCode+SFSymbol, Theme+ColorScheme） |
+| `Localization/` | L10n.swift（自動生成）, LocalizedStringResource+Extension.swift |
+| `Resources/` | Localizable.xcstrings |
+| `Tokens/` | Spacing, Size（CornerRadius ネスト含む）, AppSymbol |
 
 ### WeatherFeature (`Packages/WeatherFeature/`)
 
-ソースは **画面モジュール単位**のサブディレクトリで管理する。Phase 5 で View を追加する際は同じディレクトリに置く。
+ソースは **画面モジュール単位**のサブディレクトリで管理する。
 
 ```
 Sources/
 ├── MVVM/               # SPM target: WeatherFeatureMVVM
-│   ├── App/            # AppViewModel
-│   ├── CurrentWeather/ # CurrentWeatherViewModel（+ 将来: CurrentWeatherView）
-│   ├── WeeklyForecast/ # WeeklyForecastViewModel
-│   ├── CitySearch/     # CitySearchViewModel
-│   └── CityList/       # CityListViewModel
-└── TCA/                # SPM target: WeatherFeatureTCA（Phase 4）
+│   ├── App/            # AppViewModel, RootView
+│   ├── CurrentWeather/ # CurrentWeatherViewModel, CurrentWeatherView
+│   ├── WeeklyForecast/ # WeeklyForecastViewModel, WeeklyForecastView
+│   ├── HourlyChart/    # HourlyChartView
+│   ├── CitySearch/     # CitySearchViewModel, CitySearchView
+│   ├── CityList/       # CityListViewModel, CityListView
+│   └── Settings/       # SettingsView
+└── TCA/                # SPM target: WeatherFeatureTCA
+    ├── Root/           # RootFeature, RootView
+    ├── CurrentWeather/ # CurrentWeatherFeature, CurrentWeatherView
+    ├── WeeklyForecast/ # WeeklyForecastFeature, WeeklyForecastView
+    ├── HourlyChart/    # HourlyChartFeature, HourlyChartView
+    ├── CityList/       # CityListFeature, CityRowFeature, CityListView, CityRowView
+    ├── CitySearch/     # CitySearchFeature, CitySearchView
+    └── Settings/       # SettingsView
 
 Tests/
 ├── WeatherFeatureMVVMTests/  # MVVM ViewModel テスト
 │   └── Stubs.swift           # 共有スタブ・ファクトリ
-└── WeatherFeatureTCATests/   # TCA Feature テスト（Phase 4）
+└── WeatherFeatureTCATests/   # TCA Feature テスト
 ```
 
 SPM target のデフォルトパス（`Sources/<TargetName>/`）と異なるため、Package.swift で `path:` を明示する。

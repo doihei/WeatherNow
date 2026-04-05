@@ -285,11 +285,18 @@ Open-Meteo の Geocoding API で都市を検索して登録する。
 - [x] `RootFeature`（`StackState`・TabView 管理）
 
 ### Phase 5：UI 実装
-- [ ] `HourlyChartView`（Swift Charts）
-- [ ] `WeatherIconView`（WMOコード対応）
-- [ ] `SettingsView`
-- [ ] Pull to Refresh
-- [ ] ダークモード対応
+- [x] `HourlyChartView`（Swift Charts）— MVVM / TCA 両実装
+- [x] `WeatherIconView`・`TemperatureText`（CoreUI 共通コンポーネント）
+- [x] `SettingsView`・全 View ファイル（RootView / CurrentWeatherView / WeeklyForecastView / CityListView / CitySearchView）
+- [x] Pull to Refresh（`.refreshable` modifier）
+- [x] ダークモード対応（`Theme+ColorScheme.swift` + `.preferredColorScheme()`）
+
+### Phase Ex1：デザインシステム
+- [x] Design Tokens（`Spacing.swift` / `Size.swift` / `Size.CornerRadius`）— マジックナンバー排除
+- [x] `AppSymbol.swift`（SFSafeSymbols による型安全な SF Symbols 参照）
+- [x] `Localizable.xcstrings`（CoreUI 内に 27 キー定義）+ `L10n.swift` ラッパー enum
+- [x] `LocalizedStringResource+Extension.swift`（`.string()` ヘルパー）
+- [x] `make generate` スクリプト（`scripts/generate-l10n.py/sh`）— xcstrings から L10n.swift を自動生成
 
 ---
 
@@ -312,3 +319,4 @@ Open-Meteo の Geocoding API で都市を検索して登録する。
 | SwiftData 設計 | CityRecord（@Model）を Domain 層に閉じ込める・ModelContext(container) で都度生成・@MainActor 不要 | Day 15 |
 | テスト設計原則 | 1テスト1関心事・境界値・UUID 隔離・static stub・抜け漏れ検知 | Day 14 |
 | Xcode ビルド最適化 | モジュール並列コンパイル・-warn-long-function-bodies・Explicit Module Builds | Day 15 |
+| デザインシステム設計 | Spacing/Size トークン・AppSymbol・String Catalog + L10n 自動生成 | Ex1 |

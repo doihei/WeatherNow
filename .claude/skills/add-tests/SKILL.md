@@ -84,6 +84,9 @@ repo.weatherStub = Weather.stub(temperature: 30.0)
 // StubLocationService — location プロパティで差し替え可能
 var loc = StubLocationService()
 loc.location = (latitude: 34.69, longitude: 135.50)
+
+// HourlyForecast.stub() — time を指定可能（デフォルト: Date()）
+let forecast = HourlyForecast.stub(time: Date())
 ```
 
 永続化サービス（`AppSettingsService` / `CityListService`）はモックを使わず、
@@ -113,6 +116,9 @@ var repo = StubWeatherRepository()
 repo.weatherStub = Weather.stub(temperature: 30.0)
 
 // StubLocationService — location プロパティで差し替え可能
+
+// HourlyForecast.stub() — time を指定可能（デフォルト: Date()）
+let forecast = HourlyForecast.stub(time: Date())
 ```
 
 TestStore は `@MainActor` が必要。テストグループ struct にも `@MainActor` を付与する。

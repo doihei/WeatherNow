@@ -18,6 +18,9 @@ make format
 # Lint
 make lint
 
+# L10n.swift を Localizable.xcstrings から再生成（xcstrings 変更時）
+make generate
+
 # テスト実行
 make test               # 全パッケージ
 make test-models        # CoreModels のみ

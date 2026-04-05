@@ -25,7 +25,7 @@ CoreUI
 |---|---|---|
 | CoreModels | データモデル、エラー型、設定値 | UI依存のコード、ネットワーク処理 |
 | CoreNetwork | APIクライアント、レスポンス変換 | UI処理、ビジネスロジック |
-| CoreUI | 共通UIコンポーネント、モデルへのUI extension | ネットワーク処理、ビジネスロジック |
+| CoreUI | 共通UIコンポーネント、モデルへのUI extension、Design Tokens（Spacing/Size/AppSymbol）、ローカライズ文字列（L10n） | ネットワーク処理、ビジネスロジック |
 | WeatherDomain | Repository、LocationService | UI処理 |
 | WeatherFeature | View、ViewModel / Feature | ネットワーク直接呼び出し |
 

@@ -16,6 +16,7 @@ Open-Meteo API を使った iOS 天気予報アプリ。MVVM + TCA の2アーキ
 make bootstrap          # SwiftFormat・SwiftLint を release ビルド（初回のみ）
 make format             # コード整形
 make lint               # コード検査
+make generate           # L10n.swift を Localizable.xcstrings から再生成
 make test               # 全テスト
 make test-feature-mvvm  # MVVM のみ
 make test-feature-tca   # TCA のみ
@@ -31,4 +32,5 @@ make test-feature-tca   # TCA のみ
 - **Phase 1–2 完了**：CoreModels・CoreNetwork・CoreUI・WeatherDomain
 - **Phase 3 完了**：WeatherFeature MVVM ViewModels
 - **Phase 4 完了**：WeatherFeature TCA Features（36テスト）
-- **Phase 5 以降**：UI 実装は未着手
+- **Phase 5 完了**：全 View 実装（MVVM / TCA）・Swift Charts・ダークモード対応
+- **Phase Ex1 完了**：デザインシステム（Spacing / Size / AppSymbol トークン・L10n 自動生成）
