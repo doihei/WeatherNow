@@ -4,6 +4,7 @@ import PackageDescription
 
 let package = Package(
     name: "CoreUI",
+    defaultLocalization: "ja", // Required for packages with localized resources
     platforms: [.iOS(.v17), .macOS(.v14)],
     products: [
         .library(
@@ -21,7 +22,8 @@ let package = Package(
             dependencies: [
                 "CoreModels",
                 .product(name: "SFSafeSymbols", package: "SFSafeSymbols"),
-            ]
+            ],
+            resources: [.process("Resources")]
         ),
         .testTarget(
             name: "CoreUITests",

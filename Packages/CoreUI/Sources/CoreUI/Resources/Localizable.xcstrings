@@ -1,0 +1,330 @@
+{
+  "sourceLanguage" : "ja",
+  "strings" : {
+    "cityList.title" : {
+      "comment" : "CityListView - navigation title",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "都市"
+          }
+        }
+      }
+    },
+    "citySearch.emptyResult" : {
+      "comment" : "CitySearchView - empty state message when no results found",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "検索結果がありません"
+          }
+        }
+      }
+    },
+    "citySearch.searchPrompt" : {
+      "comment" : "CitySearchView - search bar placeholder",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "都市名を入力"
+          }
+        }
+      }
+    },
+    "citySearch.title" : {
+      "comment" : "CitySearchView - navigation title",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "都市を追加"
+          }
+        }
+      }
+    },
+    "currentWeather.feelsLikePrefix" : {
+      "comment" : "CurrentWeatherView - feels like temperature label prefix",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "体感"
+          }
+        }
+      }
+    },
+    "currentWeather.hourlyChartButton" : {
+      "comment" : "CurrentWeatherView - hourly chart navigation button label",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "グラフ"
+          }
+        }
+      }
+    },
+    "currentWeather.loading" : {
+      "comment" : "CurrentWeatherView - loading state message",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "天気を取得中..."
+          }
+        }
+      }
+    },
+    "currentWeather.openSettings" : {
+      "comment" : "CurrentWeatherView - location permission error button",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "設定を開く"
+          }
+        }
+      }
+    },
+    "currentWeather.retry" : {
+      "comment" : "CurrentWeatherView - error state retry button",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "再試行"
+          }
+        }
+      }
+    },
+    "currentWeather.title" : {
+      "comment" : "CurrentWeatherView - default navigation title when city name is unavailable",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "現在地"
+          }
+        }
+      }
+    },
+    "currentWeather.todayForecast" : {
+      "comment" : "CurrentWeatherView - hourly forecast section header",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今日の予報"
+          }
+        }
+      }
+    },
+    "currentWeather.weeklyForecastButton" : {
+      "comment" : "CurrentWeatherView - weekly forecast navigation button label",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "週間予報"
+          }
+        }
+      }
+    },
+    "hourlyChart.precipitation" : {
+      "comment" : "HourlyChartView - precipitation chart section label",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "降水量"
+          }
+        }
+      }
+    },
+    "hourlyChart.temperature" : {
+      "comment" : "HourlyChartView - temperature chart section label",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "気温"
+          }
+        }
+      }
+    },
+    "hourlyChart.time" : {
+      "comment" : "HourlyChartView - time axis label used in Swift Charts .value()",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "時刻"
+          }
+        }
+      }
+    },
+    "hourlyChart.title" : {
+      "comment" : "HourlyChartView - navigation title",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "24時間グラフ"
+          }
+        }
+      }
+    },
+    "settings.appearanceSection" : {
+      "comment" : "SettingsView - appearance section header",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "外観"
+          }
+        }
+      }
+    },
+    "settings.infoSection" : {
+      "comment" : "SettingsView - info section header",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "情報"
+          }
+        }
+      }
+    },
+    "settings.temperaturePicker" : {
+      "comment" : "SettingsView - temperature unit picker label",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "温度"
+          }
+        }
+      }
+    },
+    "settings.themePicker" : {
+      "comment" : "SettingsView - theme picker label",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "テーマ"
+          }
+        }
+      }
+    },
+    "settings.title" : {
+      "comment" : "SettingsView - navigation title / settings tab label",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "設定"
+          }
+        }
+      }
+    },
+    "settings.unitSection" : {
+      "comment" : "SettingsView - unit section header",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "単位"
+          }
+        }
+      }
+    },
+    "settings.windPicker" : {
+      "comment" : "SettingsView - wind speed unit picker label",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "風速"
+          }
+        }
+      }
+    },
+    "tab.city" : {
+      "comment" : "Tab bar - city tab label",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "都市"
+          }
+        }
+      }
+    },
+    "tab.settings" : {
+      "comment" : "Tab bar - settings tab label",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "設定"
+          }
+        }
+      }
+    },
+    "tab.weather" : {
+      "comment" : "Tab bar - weather tab label",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "天気"
+          }
+        }
+      }
+    },
+    "weeklyForecast.title" : {
+      "comment" : "WeeklyForecastView - navigation title",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "週間予報"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

@@ -1,4 +1,4 @@
-.PHONY: bootstrap format lint test test-models test-network test-domain test-feature test-feature-mvvm test-feature-tca
+.PHONY: bootstrap format lint generate test test-models test-network test-domain test-feature test-feature-mvvm test-feature-tca
 
 bootstrap:
 	swift build --package-path Tools -c release --product swiftlint
@@ -6,6 +6,9 @@ bootstrap:
 
 format:
 	Tools/.build/release/swiftformat .
+
+generate:
+	bash scripts/generate-l10n.sh
 
 lint:
 	Tools/.build/release/swiftlint lint .
