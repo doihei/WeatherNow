@@ -233,7 +233,7 @@ Open-Meteo の Geocoding API で都市を検索して登録する。
 - ナビゲーションは `RootFeature` が `StackState` を管理
 - DI は `@Dependency` で注入。`testValue` を必ず定義
 - CityList は `.forEach` + `IdentifiedArrayOf` で各行を管理
-- 都市検索の debounce は `.debounce(id:, for:, scheduler:)` で実装
+- 都市検索の debounce は `clock.sleep(.milliseconds(300))` + `.cancellable(id:, cancelInFlight: true)` で実装
 
 ---
 

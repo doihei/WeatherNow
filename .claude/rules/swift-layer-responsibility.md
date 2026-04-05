@@ -46,3 +46,4 @@ CoreUI
 | SFSafeSymbols | CoreUI のみ |
 | swift-composable-architecture | WeatherFeatureTCA のみ |
 | swift-dependencies | CoreNetwork・WeatherDomain・WeatherFeatureMVVM（各テストターゲット含む） |
+| swift-dependencies（TCA 経由） | WeatherFeatureTCA・WeatherFeatureTCATests（ComposableArchitecture の transitive dependency） |
