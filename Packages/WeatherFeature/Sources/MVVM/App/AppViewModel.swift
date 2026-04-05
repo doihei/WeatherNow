@@ -3,6 +3,19 @@ import Dependencies
 import SwiftUI
 import WeatherDomain
 
+// MARK: - Navigation Destinations
+
+/// 天気タブの NavigationPath 行先
+public enum WeatherDestination: Hashable, Sendable {
+    case weeklyForecast
+    case hourlyChart
+}
+
+/// 都市タブの NavigationPath 行先
+public enum CityDestination: Hashable, Sendable {
+    case search
+}
+
 // MARK: - AppViewModel
 
 @MainActor

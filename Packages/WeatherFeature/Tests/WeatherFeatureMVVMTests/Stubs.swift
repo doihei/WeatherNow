@@ -67,3 +67,9 @@ extension DailyForecast {
         DailyForecast(date: date, maxTemp: 25.0, minTemp: 15.0, precipitationProb: 10, code: .clearSky)
     }
 }
+
+extension HourlyForecast {
+    static func stub(time: Date = Date()) -> HourlyForecast {
+        HourlyForecast(time: time, temperature: 20.0, precipitation: 0.0, code: .clearSky)
+    }
+}
