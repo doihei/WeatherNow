@@ -75,6 +75,8 @@ public struct RootFeature: Sendable {
 
     // MARK: - Reducer
 
+    public init() {}
+
     public var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {

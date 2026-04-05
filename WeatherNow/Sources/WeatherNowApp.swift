@@ -11,33 +11,34 @@
 
 // MARK: - MVVM
 
+//
+// import SwiftUI
+// import WeatherFeatureMVVM
+//
+// @main
+// struct WeatherNowApp: App {
+//    var body: some Scene {
+//        WindowGroup {
+//            RootView()
+//        }
+//    }
+// }
+
+// MARK: - TCA
+
+import ComposableArchitecture
 import SwiftUI
-import WeatherFeatureMVVM
+import WeatherFeatureTCA
 
 @main
 struct WeatherNowApp: App {
     var body: some Scene {
         WindowGroup {
-            RootView()
+            RootView(
+                store: Store(initialState: RootFeature.State()) {
+                    RootFeature()
+                }
+            )
         }
     }
 }
-
-// MARK: - TCA
-
-// import ComposableArchitecture
-// import SwiftUI
-// import WeatherFeatureTCA
-//
-// @main
-// struct WeatherNowApp: App {
-//     var body: some Scene {
-//         WindowGroup {
-//             RootView(
-//                 store: Store(initialState: RootFeature.State()) {
-//                     RootFeature()
-//                 }
-//             )
-//         }
-//     }
-// }
