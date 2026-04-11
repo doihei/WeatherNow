@@ -47,6 +47,6 @@ WeatherNow
 
 | ファイル | 内容 |
 |---|---|
-| [Docs/spec.md](Docs/spec.md) | 画面仕様・データモデル設計 |
-| [Docs/api.md](Docs/api.md) | Open-Meteo API エンドポイント・レスポンス定義 |
-| [Docs/architecture.md](Docs/architecture.md) | モジュール構成・依存関係・MVVM vs TCA 比較 |
+| [docs/spec.md](docs/spec.md) | 画面仕様・データモデル設計 |
+| [docs/api.md](docs/api.md) | Open-Meteo API エンドポイント・レスポンス定義 |
+| [docs/architecture.md](docs/architecture.md) | モジュール構成・依存関係・MVVM vs TCA 比較 |
