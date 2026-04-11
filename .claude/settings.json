@@ -14,8 +14,6 @@
       "Bash(find:*)",
       "Bash(cat:*)",
       "Bash(open:*)",
-      "Edit(/.claude/skills/git-cm/**)",
-      "Edit(/.claude/skills/update-docs/**)",
       "Edit(/.claude/rules/**)",
       "Bash(Tools/.build/release/swiftlint:*)",
       "Bash(Tools/.build/release/swiftformat:*)",
